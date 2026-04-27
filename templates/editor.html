@@ -9,7 +9,7 @@
         :root {
             --primary: #6366f1;
             --primary-hover: #4f46e5;
-            --bg: #f1f5f9;
+            --bg: #f8fafc;
             --card: #ffffff;
             --border: #e2e8f0;
             --text: #0f172a;
@@ -17,10 +17,11 @@
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--text); }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; }
 
         .navbar {
-            background: white;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
             padding: 1rem 2rem;
             display: flex;
             justify-content: space-between;
@@ -31,33 +32,43 @@
             z-index: 100;
         }
 
-        .container { max-width: 1200px; margin: 2rem auto; padding: 0 1rem; display: grid; grid-template-columns: 1fr 400px; gap: 2rem; }
+        .container { max-width: 1400px; margin: 0 auto; padding: 2rem; display: grid; grid-template-columns: 1fr 500px; gap: 2rem; }
         
-        .editor-panel { background: var(--card); border-radius: 24px; padding: 2rem; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
-        .preview-panel { background: #cbd5e1; border-radius: 24px; padding: 1rem; border: 1px solid var(--border); position: sticky; top: 5rem; height: calc(100vh - 7rem); display: flex; flex-direction: column; }
+        .editor-panel { background: var(--card); border-radius: 24px; padding: 2.5rem; border: 1px solid var(--border); box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05); }
+        .preview-panel { background: #e2e8f0; border-radius: 24px; padding: 1.5rem; border: 1px solid var(--border); position: sticky; top: 6rem; height: calc(100vh - 8rem); display: flex; flex-direction: column; }
         
-        iframe { flex: 1; border: none; border-radius: 16px; background: white; }
+        iframe { flex: 1; border: none; border-radius: 16px; background: white; box-shadow: 0 20px 50px rgba(0,0,0,0.1); }
 
-        h2 { margin-bottom: 1.5rem; font-size: 1.5rem; font-weight: 800; }
-        .section { margin-bottom: 2.5rem; }
-        .form-group { margin-bottom: 1.25rem; }
-        label { display: block; margin-bottom: 0.5rem; font-weight: 600; font-size: 0.9rem; }
+        h2 { margin-bottom: 1.5rem; font-size: 1.5rem; font-weight: 800; letter-spacing: -0.5px; display: flex; align-items: center; gap: 10px; }
+        .section { margin-bottom: 3.5rem; animation: fadeIn 0.5s ease-out; }
+        
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .form-group { margin-bottom: 1.5rem; }
+        label { display: block; margin-bottom: 0.6rem; font-weight: 700; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); }
+        
         input, select, textarea {
-            width: 100%; padding: 0.75rem 1rem; border-radius: 12px; border: 1px solid var(--border);
-            font-family: inherit; font-size: 1rem; transition: all 0.2s;
+            width: 100%; padding: 0.85rem 1.25rem; border-radius: 12px; border: 2px solid #f1f5f9;
+            font-family: inherit; font-size: 1rem; transition: all 0.2s; background: #f8fafc;
         }
-        input:focus, textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1); }
+        input:focus, textarea:focus { outline: none; border-color: var(--primary); background: white; box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1); }
         
-        .entry-card { background: #f8fafc; padding: 1.5rem; border-radius: 16px; border: 1px solid var(--border); margin-bottom: 1rem; position: relative; }
-        .btn-remove { position: absolute; top: 1rem; right: 1rem; background: #fee2e2; color: #ef4444; border: none; padding: 0.5rem; border-radius: 8px; cursor: pointer; }
+        .entry-card { background: white; padding: 2rem; border-radius: 20px; border: 1px solid var(--border); margin-bottom: 1.5rem; position: relative; transition: all 0.2s; }
+        .entry-card:hover { border-color: var(--primary); transform: translateX(5px); }
+        .btn-remove { position: absolute; top: 1rem; right: 1rem; background: #fee2e2; color: #ef4444; border: none; padding: 0.5rem; border-radius: 8px; cursor: pointer; opacity: 0; transition: 0.2s; }
+        .entry-card:hover .btn-remove { opacity: 1; }
 
-        .btn { padding: 0.75rem 1.5rem; border-radius: 12px; font-weight: 700; cursor: pointer; transition: all 0.2s; border: none; }
-        .btn-primary { background: var(--primary); color: white; }
-        .btn-secondary { background: #f1f5f9; color: var(--text); }
+        .btn { padding: 0.85rem 1.75rem; border-radius: 14px; font-weight: 800; cursor: pointer; transition: all 0.2s; border: none; display: inline-flex; align-items: center; gap: 8px; }
+        .btn-primary { background: linear-gradient(135deg, #6366f1, #8b5cf6); color: white; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3); }
+        .btn-secondary { background: #f1f5f9; color: var(--text); border: 1px solid var(--border); }
+        .btn-secondary:hover { background: #e2e8f0; }
         
-        .actions { display: flex; gap: 1rem; margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--border); }
+        #saveStatus { font-size: 0.85rem; font-weight: 700; color: var(--text-muted); display: flex; align-items: center; gap: 6px; }
+        .spinner { width: 14px; height: 14px; border: 2px solid #cbd5e1; border-top-color: var(--primary); border-radius: 50%; animation: spin 1s linear infinite; display: none; }
+        @keyframes spin { to { transform: rotate(360deg); } }
 
-        @media (max-width: 1024px) {
+        @media (max-width: 1200px) {
             .container { grid-template-columns: 1fr; }
             .preview-panel { display: none; }
         }
@@ -65,9 +76,10 @@
 </head>
 <body>
     <nav class="navbar">
-        <a href="/" style="text-decoration: none; font-weight: 800; color: var(--primary);">← DASHBOARD</a>
-        <div style="display: flex; gap: 1rem;">
-            <button onclick="saveCv()" class="btn btn-primary">Save Resume</button>
+        <a href="/" style="text-decoration: none; font-weight: 800; color: var(--primary); letter-spacing: -1px; font-size: 1.2rem;">RESUME PRO</a>
+        <div style="display: flex; align-items: center; gap: 2rem;">
+            <div id="saveStatus"><div class="spinner" id="saveSpinner"></div> <span id="statusText">Ready</span></div>
+            <button onclick="saveCv()" class="btn btn-primary">Save to Cloud</button>
         </div>
     </nav>
 
@@ -77,113 +89,120 @@
                 <input type="hidden" id="cvId" value="{{ cv_id or '' }}">
                 
                 <div class="section">
-                    <h2>General Settings</h2>
-                    <div class="form-group">
-                        <label>Resume Title</label>
-                        <input type="text" id="title" value="{{ cv.title or 'Untitled Resume' }}">
-                    </div>
-                    <div class="form-group">
-                        <label>Visual Template</label>
-                        <select id="template">
-                            <option value="Classic" {% if cv.template == 'Classic' %}selected{% endif %}>Classic</option>
-                            <option value="Formal" {% if cv.template == 'Formal' %}selected{% endif %}>Formal</option>
-                            <option value="Colorful" {% if cv.template == 'Colorful' %}selected{% endif %}>Colorful</option>
-                        </select>
+                    <h2>⚙️ Resume Settings</h2>
+                    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem;">
+                        <div class="form-group">
+                            <label>Document Name</label>
+                            <input type="text" id="title" value="{{ cv.title or 'My Professional Resume' }}" onchange="autoUpdate()">
+                        </div>
+                        <div class="form-group">
+                            <label>Template Style</label>
+                            <select id="template" onchange="autoUpdate()">
+                                <option value="Classic" {% if cv.template == 'Classic' %}selected{% endif %}>Classic</option>
+                                <option value="Formal" {% if cv.template == 'Formal' %}selected{% endif %}>Formal</option>
+                                <option value="Colorful" {% if cv.template == 'Colorful' %}selected{% endif %}>Colorful</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
 
                 <div class="section">
-                    <h2>Personal Information</h2>
+                    <h2>👤 Personal Identity</h2>
                     <div class="form-group">
                         <label>Full Name</label>
-                        <input type="text" id="fullName" value="{{ cv.full_name or '' }}">
+                        <input type="text" id="fullName" value="{{ cv.full_name or '' }}" placeholder="e.g. John Doe" oninput="autoUpdate()">
                     </div>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
                         <div class="form-group">
-                            <label>Email</label>
-                            <input type="email" id="email" value="{{ cv.email or '' }}">
+                            <label>Professional Email</label>
+                            <input type="email" id="email" value="{{ cv.email or '' }}" placeholder="john@example.com" oninput="autoUpdate()">
                         </div>
                         <div class="form-group">
-                            <label>Phone</label>
-                            <input type="text" id="phone" value="{{ cv.phone or '' }}">
+                            <label>Contact Number</label>
+                            <input type="text" id="phone" value="{{ cv.phone or '' }}" placeholder="+1 234 567 890" oninput="autoUpdate()">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label>Summary</label>
-                        <textarea id="summary" rows="4">{{ cv.summary or '' }}</textarea>
+                        <label>Professional Profile Summary</label>
+                        <textarea id="summary" rows="5" placeholder="Highlight your key achievements and goals..." oninput="autoUpdate()">{{ cv.summary or '' }}</textarea>
                     </div>
                 </div>
 
                 <div class="section">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                        <h2>Experience</h2>
-                        <button type="button" onclick="addExperience()" class="btn btn-secondary">+ Add</button>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                        <h2>💼 Work Experience</h2>
+                        <button type="button" onclick="addExperience()" class="btn btn-secondary">+ Add Experience</button>
                     </div>
                     <div id="experienceList">
                         {% for exp in cv.experience or [] %}
                         <div class="entry-card experience-entry">
-                            <button type="button" class="btn-remove" onclick="this.parentElement.remove()">✕</button>
-                            <div class="form-group"><label>Job Title</label><input type="text" class="exp-title" value="{{ exp.job_title }}"></div>
-                            <div class="form-group"><label>Company</label><input type="text" class="exp-company" value="{{ exp.company }}"></div>
-                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                                <div class="form-group"><label>Start Date</label><input type="text" class="exp-start" value="{{ exp.start_date }}"></div>
-                                <div class="form-group"><label>End Date</label><input type="text" class="exp-end" value="{{ exp.end_date }}"></div>
+                            <button type="button" class="btn-remove" onclick="this.parentElement.remove(); autoUpdate()">✕</button>
+                            <div class="form-group"><label>Position / Role</label><input type="text" class="exp-title" value="{{ exp.job_title }}" oninput="autoUpdate()"></div>
+                            <div class="form-group"><label>Company / Organization</label><input type="text" class="exp-company" value="{{ exp.company }}" oninput="autoUpdate()"></div>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                                <div class="form-group"><label>Start Date</label><input type="text" class="exp-start" value="{{ exp.start_date }}" oninput="autoUpdate()"></div>
+                                <div class="form-group"><label>End Date</label><input type="text" class="exp-end" value="{{ exp.end_date }}" oninput="autoUpdate()"></div>
                             </div>
-                            <div class="form-group"><label>Description</label><textarea class="exp-desc" rows="3">{{ exp.description }}</textarea></div>
+                            <div class="form-group"><label>Core Responsibilities</label><textarea class="exp-desc" rows="4" oninput="autoUpdate()">{{ exp.description }}</textarea></div>
                         </div>
                         {% endfor %}
                     </div>
                 </div>
 
                 <div class="section">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                        <h2>Education</h2>
-                        <button type="button" onclick="addEducation()" class="btn btn-secondary">+ Add</button>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                        <h2>🎓 Academic Background</h2>
+                        <button type="button" onclick="addEducation()" class="btn btn-secondary">+ Add Education</button>
                     </div>
                     <div id="educationList">
                         {% for edu in cv.education or [] %}
                         <div class="entry-card education-entry">
-                            <button type="button" class="btn-remove" onclick="this.parentElement.remove()">✕</button>
-                            <div class="form-group"><label>Degree</label><input type="text" class="edu-degree" value="{{ edu.degree }}"></div>
-                            <div class="form-group"><label>Institution</label><input type="text" class="edu-inst" value="{{ edu.institution }}"></div>
-                            <div class="form-group"><label>Year</label><input type="text" class="edu-year" value="{{ edu.year }}"></div>
+                            <button type="button" class="btn-remove" onclick="this.parentElement.remove(); autoUpdate()">✕</button>
+                            <div class="form-group"><label>Degree / Certificate</label><input type="text" class="edu-degree" value="{{ edu.degree }}" oninput="autoUpdate()"></div>
+                            <div class="form-group"><label>School / University</label><input type="text" class="edu-inst" value="{{ edu.institution }}" oninput="autoUpdate()"></div>
+                            <div class="form-group"><label>Graduation Year</label><input type="text" class="edu-year" value="{{ edu.year }}" oninput="autoUpdate()"></div>
                         </div>
                         {% endfor %}
                     </div>
                 </div>
 
                 <div class="section">
-                    <h2>Skills</h2>
+                    <h2>🛠️ Skills & Specializations</h2>
                     <div class="form-group">
-                        <label>Skills (comma separated)</label>
-                        <textarea id="skills" rows="3">{{ cv.skills|join(', ') if cv.skills else '' }}</textarea>
+                        <label>Technical Expertise (separate with commas)</label>
+                        <textarea id="skills" rows="3" placeholder="Python, React, Project Management, SQL..." oninput="autoUpdate()">{{ cv.skills|join(', ') if cv.skills else '' }}</textarea>
                     </div>
                 </div>
             </form>
         </div>
 
         <div class="preview-panel">
-            <div style="padding: 1rem; text-align: center; font-weight: 800; font-size: 0.8rem; color: #475569; letter-spacing: 2px;">LIVE PREVIEW</div>
+            <div style="padding-bottom: 1rem; display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-weight: 800; font-size: 0.75rem; color: #64748b; letter-spacing: 2px;">LIVE STUDIO PREVIEW</span>
+                <span id="previewStatus" style="font-size: 11px; font-weight: 700; color: #10b981;">● SYNCED</span>
+            </div>
             <iframe id="previewIframe"></iframe>
-            <div style="padding: 1rem; display: flex; gap: 1rem;">
-                <button onclick="saveCv()" class="btn btn-primary" style="flex: 1;">Save Changes</button>
+            <div style="margin-top: 1.5rem;">
+                <button onclick="saveCv()" class="btn btn-primary" style="width: 100%; justify-content: center;">💾 Finalize & Save Changes</button>
             </div>
         </div>
     </div>
 
     <script>
+        let autoSaveTimer;
+
         function addExperience() {
             const div = document.createElement('div');
             div.className = 'entry-card experience-entry';
             div.innerHTML = `
-                <button type="button" class="btn-remove" onclick="this.parentElement.remove()">✕</button>
-                <div class="form-group"><label>Job Title</label><input type="text" class="exp-title"></div>
-                <div class="form-group"><label>Company</label><input type="text" class="exp-company"></div>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                    <div class="form-group"><label>Start Date</label><input type="text" class="exp-start"></div>
-                    <div class="form-group"><label>End Date</label><input type="text" class="exp-end"></div>
+                <button type="button" class="btn-remove" onclick="this.parentElement.remove(); autoUpdate()">✕</button>
+                <div class="form-group"><label>Position / Role</label><input type="text" class="exp-title" oninput="autoUpdate()"></div>
+                <div class="form-group"><label>Company / Organization</label><input type="text" class="exp-company" oninput="autoUpdate()"></div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                    <div class="form-group"><label>Start Date</label><input type="text" class="exp-start" oninput="autoUpdate()"></div>
+                    <div class="form-group"><label>End Date</label><input type="text" class="exp-end" oninput="autoUpdate()"></div>
                 </div>
-                <div class="form-group"><label>Description</label><textarea class="exp-desc" rows="3"></textarea></div>
+                <div class="form-group"><label>Core Responsibilities</label><textarea class="exp-desc" rows="4" oninput="autoUpdate()"></textarea></div>
             `;
             document.getElementById('experienceList').appendChild(div);
         }
@@ -192,10 +211,10 @@
             const div = document.createElement('div');
             div.className = 'entry-card education-entry';
             div.innerHTML = `
-                <button type="button" class="btn-remove" onclick="this.parentElement.remove()">✕</button>
-                <div class="form-group"><label>Degree</label><input type="text" class="edu-degree"></div>
-                <div class="form-group"><label>Institution</label><input type="text" class="edu-inst"></div>
-                <div class="form-group"><label>Year</label><input type="text" class="edu-year"></div>
+                <button type="button" class="btn-remove" onclick="this.parentElement.remove(); autoUpdate()">✕</button>
+                <div class="form-group"><label>Degree / Certificate</label><input type="text" class="edu-degree" oninput="autoUpdate()"></div>
+                <div class="form-group"><label>School / University</label><input type="text" class="edu-inst" oninput="autoUpdate()"></div>
+                <div class="form-group"><label>Graduation Year</label><input type="text" class="edu-year" oninput="autoUpdate()"></div>
             `;
             document.getElementById('educationList').appendChild(div);
         }
@@ -236,29 +255,57 @@
         }
 
         async function saveCv() {
-            const data = collectData();
-            const response = await fetch('/save', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
-            });
-            const result = await response.json();
-            if (result.status === 'success') {
-                document.getElementById('cvId').value = result.cv_id;
-                updatePreview();
-                alert('Saved successfully!');
+            const statusText = document.getElementById('statusText');
+            const spinner = document.getElementById('saveSpinner');
+            
+            statusText.innerText = 'Saving...';
+            spinner.style.display = 'block';
+
+            try {
+                const data = collectData();
+                const response = await fetch('/save', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                const result = await response.json();
+                if (result.status === 'success') {
+                    document.getElementById('cvId').value = result.cv_id;
+                    updatePreview();
+                    statusText.innerText = 'All changes saved';
+                }
+            } catch (e) {
+                statusText.innerText = 'Error saving';
+            } finally {
+                spinner.style.display = 'none';
             }
+        }
+
+        function autoUpdate() {
+            document.getElementById('statusText').innerText = 'Unsaved changes';
+            document.getElementById('previewStatus').innerText = '● OUTDATED';
+            document.getElementById('previewStatus').style.color = '#f59e0b';
+            
+            clearTimeout(autoSaveTimer);
+            autoSaveTimer = setTimeout(() => {
+                // We don't auto-save to Supabase to avoid too many writes, 
+                // but we could if needed. For now, just update the preview.
+                // updatePreview(); 
+            }, 1000);
         }
 
         function updatePreview() {
             const id = document.getElementById('cvId').value;
             if (id) {
                 document.getElementById('previewIframe').src = `/preview/${id}`;
+                document.getElementById('previewStatus').innerText = '● SYNCED';
+                document.getElementById('previewStatus').style.color = '#10b981';
             }
         }
 
-        // Auto-update preview on load if editing
         window.onload = updatePreview;
     </script>
+</body>
+</html>
 </body>
 </html>

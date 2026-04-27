@@ -1,147 +1,142 @@
-import sqlite3
 import os
+from supabase import create_client, Client
+from dotenv import load_dotenv
 
-DB_PATH = "cv_data.db"
+# Load environment variables for local development
+load_dotenv()
 
-def get_connection():
-    conn = sqlite3.connect(DB_PATH)
-    conn.row_factory = sqlite3.Row
-    return conn
+URL: str = os.environ.get("SUPABASE_URL", "https://utlexxyqsxgikrdbmnix.supabase.co")
+KEY: str = os.environ.get("SUPABASE_KEY", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV0bGV4eHlxc3hnaWtyZGJtbml4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyMDkzMzksImV4cCI6MjA5Mjc4NTMzOX0.fXRkOFCc1di7jcSKBy5S8VUAqofVxM5p2O9iTU9csMY")
+
+# Initialize the Supabase client
+supabase: Client = None
+if URL and KEY:
+    supabase = create_client(URL, KEY)
 
 def init_db():
-    with get_connection() as conn:
-        cursor = conn.cursor()
-        cursor.execute('''
-            CREATE TABLE IF NOT EXISTS cvs (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                title TEXT NOT NULL,
-                template TEXT DEFAULT 'Classic',
-                full_name TEXT,
-                email TEXT,
-                phone TEXT,
-                address TEXT,
-                linkedin TEXT,
-                summary TEXT
-            )
-        ''')
-        # Migration: Add template column if it doesn't exist
-        cursor.execute("PRAGMA table_info(cvs)")
-        columns = [column[1] for column in cursor.fetchall()]
-        if 'template' not in columns:
-            cursor.execute("ALTER TABLE cvs ADD COLUMN template TEXT DEFAULT 'Classic'")
-        
-        cursor.execute('''
-            CREATE TABLE IF NOT EXISTS experience (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                cv_id INTEGER,
-                job_title TEXT,
-                company TEXT,
-                start_date TEXT,
-                end_date TEXT,
-                description TEXT,
-                FOREIGN KEY(cv_id) REFERENCES cvs(id) ON DELETE CASCADE
-            )
-        ''')
-        cursor.execute('''
-            CREATE TABLE IF NOT EXISTS education (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                cv_id INTEGER,
-                degree TEXT,
-                institution TEXT,
-                year TEXT,
-                FOREIGN KEY(cv_id) REFERENCES cvs(id) ON DELETE CASCADE
-            )
-        ''')
-        cursor.execute('''
-            CREATE TABLE IF NOT EXISTS skills (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                cv_id INTEGER,
-                skill_name TEXT,
-                FOREIGN KEY(cv_id) REFERENCES cvs(id) ON DELETE CASCADE
-            )
-        ''')
-        cursor.execute('PRAGMA foreign_keys = ON;')
-        conn.commit()
+    """
+    In Supabase, you create tables via the Dashboard SQL Editor.
+    I will provide the SQL in the sharing guide.
+    """
+    pass
 
 def save_cv(cv_data):
-    with get_connection() as conn:
-        cursor = conn.cursor()
-        cursor.execute('PRAGMA foreign_keys = ON;')
-        
-        # Insert or update
+    if not supabase:
+        print("Error: Supabase client not initialized")
+        return None
+
+    try:
+        # Insert or update main CV entry
         cv_id = cv_data.get('id')
+        
+        cv_payload = {
+            "title": cv_data.get('title', 'Untitled'),
+            "template": cv_data.get('template', 'Classic'),
+            "full_name": cv_data.get('full_name', ''),
+            "email": cv_data.get('email', ''),
+            "phone": cv_data.get('phone', ''),
+            "address": cv_data.get('address', ''),
+            "linkedin": cv_data.get('linkedin', ''),
+            "summary": cv_data.get('summary', '')
+        }
+
         if cv_id:
-            cursor.execute('''
-                UPDATE cvs SET title=?, template=?, full_name=?, email=?, phone=?, address=?, linkedin=?, summary=?
-                WHERE id=?
-            ''', (
-                cv_data.get('title', 'Untitled'), cv_data.get('template', 'Classic'), cv_data.get('full_name', ''), cv_data.get('email', ''),
-                cv_data.get('phone', ''), cv_data.get('address', ''), cv_data.get('linkedin', ''),
-                cv_data.get('summary', ''), cv_id
-            ))
-            cursor.execute('DELETE FROM experience WHERE cv_id=?', (cv_id,))
-            cursor.execute('DELETE FROM education WHERE cv_id=?', (cv_id,))
-            cursor.execute('DELETE FROM skills WHERE cv_id=?', (cv_id,))
+            # Update
+            supabase.table('cvs').update(cv_payload).eq('id', cv_id).execute()
+            # Clear related tables for refresh (simple way to sync nested data)
+            supabase.table('experience').delete().eq('cv_id', cv_id).execute()
+            supabase.table('education').delete().eq('cv_id', cv_id).execute()
+            supabase.table('skills').delete().eq('cv_id', cv_id).execute()
         else:
-            cursor.execute('''
-                INSERT INTO cvs (title, template, full_name, email, phone, address, linkedin, summary)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-            ''', (
-                cv_data.get('title', 'Untitled'), cv_data.get('template', 'Classic'), cv_data.get('full_name', ''), cv_data.get('email', ''),
-                cv_data.get('phone', ''), cv_data.get('address', ''), cv_data.get('linkedin', ''),
-                cv_data.get('summary', '')
-            ))
-            cv_id = cursor.lastrowid
-            
+            # Insert
+            res = supabase.table('cvs').insert(cv_payload).execute()
+            if not res.data: return None
+            cv_id = res.data[0]['id']
+
+        # Batch Insert Experience
+        exp_entries = []
         for exp in cv_data.get('experience', []):
             if exp.get('job_title') or exp.get('company'):
-                cursor.execute('''
-                    INSERT INTO experience (cv_id, job_title, company, start_date, end_date, description)
-                    VALUES (?, ?, ?, ?, ?, ?)
-                ''', (cv_id, exp.get('job_title', ''), exp.get('company', ''), exp.get('start_date', ''), exp.get('end_date', ''), exp.get('description', '')))
-                
+                exp_entries.append({
+                    "cv_id": cv_id,
+                    "job_title": exp.get('job_title', ''),
+                    "company": exp.get('company', ''),
+                    "start_date": exp.get('start_date', ''),
+                    "end_date": exp.get('end_date', ''),
+                    "description": exp.get('description', '')
+                })
+        if exp_entries:
+            supabase.table('experience').insert(exp_entries).execute()
+
+        # Batch Insert Education
+        edu_entries = []
         for edu in cv_data.get('education', []):
             if edu.get('degree') or edu.get('institution'):
-                cursor.execute('''
-                    INSERT INTO education (cv_id, degree, institution, year)
-                    VALUES (?, ?, ?, ?)
-                ''', (cv_id, edu.get('degree', ''), edu.get('institution', ''), edu.get('year', '')))
-                
-        for skill in cv_data.get('skills', []):
-            if skill.strip():
-                cursor.execute('INSERT INTO skills (cv_id, skill_name) VALUES (?, ?)', (cv_id, skill.strip()))
-                
-        conn.commit()
+                edu_entries.append({
+                    "cv_id": cv_id,
+                    "degree": edu.get('degree', ''),
+                    "institution": edu.get('institution', ''),
+                    "year": edu.get('year', '')
+                })
+        if edu_entries:
+            supabase.table('education').insert(edu_entries).execute()
+
+        # Batch Insert Skills
+        skill_entries = []
+        skills_raw = cv_data.get('skills', [])
+        # Handle both list and string inputs
+        if isinstance(skills_raw, str):
+            skills_raw = [s.strip() for s in skills_raw.split(',') if s.strip()]
+            
+        for skill in skills_raw:
+            if str(skill).strip():
+                skill_entries.append({"cv_id": cv_id, "skill_name": str(skill).strip()})
+        if skill_entries:
+            supabase.table('skills').insert(skill_entries).execute()
+
         return cv_id
+    except Exception as e:
+        print(f"Database Save Error: {e}")
+        return None
 
 def get_all_cvs():
-    with get_connection() as conn:
-        cursor = conn.cursor()
-        cursor.execute('SELECT id, title, full_name FROM cvs ORDER BY id DESC')
-        return [dict(row) for row in cursor.fetchall()]
+    if not supabase: return []
+    try:
+        res = supabase.table('cvs').select('id, title, full_name').order('id', desc=True).execute()
+        return res.data or []
+    except Exception as e:
+        print(f"Database Fetch Error: {e}")
+        return []
 
 def get_cv(cv_id):
-    with get_connection() as conn:
-        cursor = conn.cursor()
-        cursor.execute('SELECT * FROM cvs WHERE id = ?', (cv_id,))
-        row = cursor.fetchone()
-        if not row: return None
-        cv = dict(row)
+    if not supabase: return None
+    
+    try:
+        # Get main CV
+        res = supabase.table('cvs').select('*').eq('id', cv_id).execute()
+        if not res.data: return None
+        cv = res.data[0]
         
-        cursor.execute('SELECT * FROM experience WHERE cv_id = ?', (cv_id,))
-        cv['experience'] = [dict(r) for r in cursor.fetchall()]
+        # Get related data in parallel (conceptually)
+        exp = supabase.table('experience').select('*').eq('cv_id', cv_id).execute()
+        cv['experience'] = exp.data or []
         
-        cursor.execute('SELECT * FROM education WHERE cv_id = ?', (cv_id,))
-        cv['education'] = [dict(r) for r in cursor.fetchall()]
+        edu = supabase.table('education').select('*').eq('cv_id', cv_id).execute()
+        cv['education'] = edu.data or []
         
-        cursor.execute('SELECT skill_name FROM skills WHERE cv_id = ?', (cv_id,))
-        cv['skills'] = [r['skill_name'] for r in cursor.fetchall()]
+        skills = supabase.table('skills').select('skill_name').eq('cv_id', cv_id).execute()
+        cv['skills'] = [s['skill_name'] for s in (skills.data or [])]
         
         return cv
+    except Exception as e:
+        print(f"Database Detail Fetch Error: {e}")
+        return None
 
 def delete_cv(cv_id):
-    with get_connection() as conn:
-        cursor = conn.cursor()
-        cursor.execute('PRAGMA foreign_keys = ON;')
-        cursor.execute('DELETE FROM cvs WHERE id = ?', (cv_id,))
-        conn.commit()
+    if not supabase: return False
+    try:
+        supabase.table('cvs').delete().eq('id', cv_id).execute()
+        return True
+    except Exception as e:
+        print(f"Database Delete Error: {e}")
+        return False
