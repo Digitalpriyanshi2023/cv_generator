@@ -1,10 +1,10 @@
-from flask import Flask, request, jsonify, Response, send_from_directory
+from flask import Flask, request, jsonify, Response
 import database
 import pdf_generator
 import os
 from flask_cors import CORS
 
-app = Flask(__name__, static_folder='../frontend')
+app = Flask(__name__)
 CORS(app) # Enable CORS for frontend interaction
 
 # Initialize database
@@ -51,16 +51,9 @@ def preview_cv(cv_id):
     html = pdf_generator.get_web_html(cv_data)
     return html
 
-# Serve Frontend
-@app.route('/')
-def index():
-    return send_from_directory(app.static_folder, 'index.html')
-
-@app.route('/<path:path>')
-def serve_static(path):
-    if os.path.exists(os.path.join(app.static_folder, path)):
-        return send_from_directory(app.static_folder, path)
-    return send_from_directory(app.static_folder, 'index.html')
+# Vercel handles static files, so we don't need index() or serve_static() here.
+# But for local development, you might still want them. 
+# However, to avoid 404s on Vercel, it's better to let Vercel handle routing.
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))

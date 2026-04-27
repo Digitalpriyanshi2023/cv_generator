@@ -3,7 +3,7 @@
 This project has been restructured into a modern web application with a separate frontend and backend.
 
 ## Project Structure
-- `frontend/`: Contains the HTML, CSS, and JavaScript for the user interface.
+- `public/`: Contains the HTML, CSS, and JavaScript for the user interface (served automatically by Vercel).
 - `api/`: Contains the Python backend (Flask) which interacts with Supabase.
 - `desktop_app/`: Contains the legacy PyQt6 desktop version.
 
