@@ -8,7 +8,8 @@ import pdf_generator
 from flask_cors import CORS
 
 app = Flask(__name__, static_folder='../public', static_url_path='')
-CORS(app) 
+app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0  # Disable static file caching in dev
+CORS(app)
 
 # Initialize database on startup
 database.init_db()
