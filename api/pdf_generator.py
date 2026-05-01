@@ -85,6 +85,17 @@ def get_web_html(cv_data):
     </div>
     ''' if skill_tags else ''
 
+    # Meta section builder (avoid nested f-strings for better compatibility)
+    meta_html = ""
+    if cv_data.get("email"):
+        meta_html += f'<div class="meta-item"><i data-lucide="mail"></i> {cv_data.get("email")}</div>'
+    if cv_data.get("phone"):
+        meta_html += f'<div class="meta-item"><i data-lucide="phone"></i> {cv_data.get("phone")}</div>'
+    if cv_data.get("address"):
+        meta_html += f'<div class="meta-item"><i data-lucide="map-pin"></i> {cv_data.get("address")}</div>'
+    if cv_data.get("linkedin"):
+        meta_html += f'<div class="meta-item"><i data-lucide="linkedin"></i> {cv_data.get("linkedin")}</div>'
+
     html = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -364,10 +375,7 @@ def get_web_html(cv_data):
             <div class="header-content">
                 <h1>{cv_data.get('full_name', 'Your Name')}</h1>
                 <div class="header-meta">
-                    {f'<div class="meta-item"><i data-lucide="mail"></i> {cv_data.get("email")}</div>' if cv_data.get("email") else ""}
-                    {f'<div class="meta-item"><i data-lucide="phone"></i> {cv_data.get("phone")}</div>' if cv_data.get("phone") else ""}
-                    {f'<div class="meta-item"><i data-lucide="map-pin"></i> {cv_data.get("address")}</div>' if cv_data.get("address") else ""}
-                    {f'<div class="meta-item"><i data-lucide="linkedin"></i> {cv_data.get("linkedin")}</div>' if cv_data.get("linkedin") else ""}
+                    {meta_html}
                 </div>
             </div>
         </header>
