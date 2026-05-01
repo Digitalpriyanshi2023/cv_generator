@@ -77,24 +77,36 @@
                     card.className = 'cv-card';
                     card.style.animation = `fadeInUp 0.6s ease-out ${i * 0.1}s forwards`;
                     card.style.opacity = '0';
+                    card.style.display = 'flex';
+                    card.style.flexDirection = 'column';
                     card.innerHTML = `
-                        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
                             <div class="cv-card-icon">
                                 <i data-lucide="file-text" style="width: 28px; height: 28px;"></i>
                             </div>
-                            <div style="display: flex; align-items: center; gap: 0.5rem; background: #ecfdf5; color: #059669; padding: 0.4rem 0.8rem; border-radius: 20px; font-size: 0.75rem; font-weight: 700;">
-                                <div class="active-pulse"></div>
-                                SYNCED
+                            <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 0.5rem;">
+                                <div style="display: flex; align-items: center; gap: 0.5rem; background: #ecfdf5; color: #059669; padding: 0.4rem 0.8rem; border-radius: 20px; font-size: 0.75rem; font-weight: 700;">
+                                    <div class="active-pulse"></div>
+                                    SYNCED
+                                </div>
                             </div>
                         </div>
-                        <div>
+
+                        <!-- Mini iframe preview -->
+                        <div style="height: 250px; border: 1px solid var(--border); border-radius: 8px; margin-bottom: 1rem; overflow: hidden; background: #fff; position: relative;">
+                            <iframe src="/api/cvs/${cv.id}/preview" style="width: 200%; height: 200%; border: none; transform: scale(0.5); transform-origin: top left; pointer-events: none;"></iframe>
+                        </div>
+
+                        <div style="flex: 1;">
                             <h3 style="font-size: 1.5rem; margin-bottom: 0.5rem;">${cv.title || 'Untitled Project'}</h3>
-                            <div style="display: flex; align-items: center; gap: 0.5rem; color: var(--text-muted); font-size: 0.95rem;">
-                                <i data-lucide="user" style="width: 16px;"></i>
-                                <span>${cv.full_name || 'Anonymous Creator'}</span>
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <div style="display: flex; align-items: center; gap: 0.5rem; color: var(--text-muted); font-size: 0.95rem;">
+                                    <i data-lucide="user" style="width: 16px;"></i>
+                                    <span>${cv.full_name || 'Anonymous Creator'}</span>
+                                </div>
                             </div>
                         </div>
-                        <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+                        <div style="display: flex; gap: 0.5rem; margin-top: 1.5rem;">
                             <a href="editor.html?id=${cv.id}" class="btn btn-primary" style="flex: 1; justify-content: center;">
                                 <i data-lucide="edit-3" style="width: 18px;"></i>
                                 <span>Refine</span>

@@ -50,3 +50,14 @@ CREATE POLICY "Public Access" ON cvs FOR ALL USING (true) WITH CHECK (true);
 CREATE POLICY "Public Access" ON experience FOR ALL USING (true) WITH CHECK (true);
 CREATE POLICY "Public Access" ON education FOR ALL USING (true) WITH CHECK (true);
 CREATE POLICY "Public Access" ON skills FOR ALL USING (true) WITH CHECK (true);
+
+-- 6. Create the Projects Table (Newly Added)
+CREATE TABLE projects (
+    id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    cv_id BIGINT REFERENCES cvs(id) ON DELETE CASCADE,
+    name TEXT,
+    link TEXT,
+    description TEXT
+);
+ALTER TABLE projects ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Public Access" ON projects FOR ALL USING (true) WITH CHECK (true);

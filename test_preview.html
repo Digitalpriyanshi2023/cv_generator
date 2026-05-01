@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Alex Rivera</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Outfit:wght@700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --primary: #6366f1;
+            --secondary: #4f46e5;
+            --accent: #eef2ff;
+            --header-text: #6366f1;
+            --text-dark: #1e293b;
+            --text-light: #64748b;
+            --border-light: #f1f5f9;
+        }
+        * { box-sizing: border-box; -webkit-print-color-adjust: exact; }
+        
+        @page { size: A4; margin: 0; }
+
+        body {
+            background: #f1f5f9;
+            font-family: 'Inter', sans-serif;
+            color: var(--text-dark);
+            margin: 0;
+            padding: 20px 0;
+            line-height: 1.5;
+        }
+
+        .page {
+            width: 210mm;
+            min-height: 297mm;
+            margin: 0 auto;
+            background: white;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+        }
+
+        @media print {
+            body { background: white; padding: 0; }
+            .page { box-shadow: none; margin: 0; width: 100%; border-radius: 0; }
+            .no-print { display: none !important; }
+        }
+
+        
+        .page { box-shadow: 0 40px 100px rgba(0,0,0,0.1); border-radius: 12px; margin-top: 20px; overflow: hidden; }
+        .section { box-shadow: 0 4px 12px rgba(0,0,0,0.02); background: rgba(255,255,255,0.8); backdrop-filter: blur(10px); }
+        .skill-cloud span { border-radius: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        header { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; }
+        .header-content h1 { color: white; }
+        .meta-item { color: rgba(255,255,255,0.9); }
+        .meta-item i { color: white; }
+        
+
+
+        header {
+            padding: 40px 60px;
+            background: #ffffff;
+            border-bottom: 1px solid var(--border-light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .header-content h1 {
+            margin: 0;
+            font-family: 'Outfit', sans-serif;
+            font-size: 36px;
+            font-weight: 800;
+            line-height: 1;
+            letter-spacing: -1.5px;
+            color: var(--primary);
+            text-transform: uppercase;
+        }
+        .header-meta {
+            margin-top: 15px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--text-light);
+        }
+        .meta-item i {
+            width: 14px;
+            height: 14px;
+            color: var(--primary);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1.8fr 1fr;
+            flex: 1;
+        }
+
+        .main-col { padding: 40px 40px 40px 60px; }
+        .side-col {
+            background: #ffffff;
+            padding: 40px 60px 40px 40px;
+            border-left: 1px solid var(--border-light);
+        }
+
+        .section { 
+            margin-bottom: 35px; 
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 12px;
+            border: 1px solid var(--border-light);
+            transition: 0.3s;
+        }
+        .section-title {
+            font-size: 13px;
+            font-weight: 900;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .section-title::after {
+            content: '';
+            flex: 1;
+            height: 2px;
+            background: linear-gradient(to right, var(--accent), transparent);
+        }
+
+        .summary-text { 
+            font-size: 13.5px; 
+            color: var(--text-dark); 
+            line-height: 1.7; 
+            text-align: justify; 
+            padding-left: 10px;
+            border-left: 3px solid var(--accent);
+        }
+        
+        .exp-item { 
+            margin-bottom: 30px; 
+            position: relative;
+            padding-bottom: 20px;
+            border-bottom: 1px dashed var(--border-light);
+        }
+        .exp-item:last-child { border-bottom: none; padding-bottom: 0; }
+
+        .exp-header { display: flex; justify-content: space-between; align-items: flex-start; }
+        .job-title { font-size: 17px; font-weight: 800; color: var(--text-dark); letter-spacing: -0.5px; }
+        .company-name { 
+            font-size: 14px; 
+            font-weight: 700; 
+            color: var(--primary); 
+            margin-top: 4px;
+            display: inline-block;
+            padding: 2px 8px;
+            background: var(--accent);
+            border-radius: 4px;
+        }
+        .exp-date { 
+            font-size: 11px; 
+            font-weight: 800; 
+            color: var(--text-light); 
+            text-transform: uppercase; 
+            background: #f8fafc;
+            padding: 4px 10px;
+            border-radius: 20px;
+            border: 1px solid var(--border-light);
+        }
+        .exp-desc { font-size: 13px; color: var(--text-light); line-height: 1.6; margin-top: 12px; }
+
+        .side-section { 
+            margin-bottom: 35px; 
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            border: 1px solid rgba(0,0,0,0.03);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+        }
+        .side-title {
+            font-size: 12px;
+            font-weight: 900;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 20px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--accent);
+            display: flex;
+            justify-content: space-between;
+        }
+        .side-item { margin-bottom: 20px; }
+        .side-item:last-child { margin-bottom: 0; }
+        .side-item-title { font-size: 13.5px; font-weight: 700; color: var(--text-dark); }
+        .side-item-sub { font-size: 12.5px; color: var(--text-light); margin-top: 4px; font-weight: 500; }
+        .side-item-meta { 
+            font-size: 11px; 
+            color: var(--primary); 
+            font-weight: 800; 
+            margin-top: 6px; 
+            display: inline-block;
+            opacity: 0.8;
+        }
+
+        .skill-cloud { display: flex; flex-wrap: wrap; gap: 8px; }
+        .skill-cloud span {
+            background: var(--accent);
+            color: var(--primary);
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 800;
+            border: 1px solid transparent;
+            transition: 0.2s;
+        }
+        .skill-cloud span:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .toolbar {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #0f172a;
+            padding: 10px 20px;
+            border-radius: 50px;
+            display: flex;
+            gap: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            z-index: 1000;
+        }
+        .tool-btn {
+            background: #6366f1;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 12px;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .tool-btn:hover { transform: translateY(-2px); }
+    </style>
+</head>
+<body>
+    <div class="toolbar no-print">
+        <button class="tool-btn" style="background: #6366f1;" onclick="triggerSave()"><i data-lucide="save"></i> SAVE</button>
+        <button class="tool-btn" style="background: #4b5563;" onclick="window.print()"><i data-lucide="printer"></i> PDF</button>
+        <button class="tool-btn" style="background: #10b981;" onclick="downloadHTML()"><i data-lucide="download"></i> HTML</button>
+    </div>
+    <script>
+        function triggerSave() {
+            if (window.parent && typeof window.parent.saveCV === 'function') {
+                window.parent.saveCV();
+            } else {
+                alert("Save action is only available within the Resume Editor.");
+            }
+        }
+        function downloadHTML() {
+            const clone = document.documentElement.cloneNode(true);
+            const toolbar = clone.querySelector('.toolbar');
+            if (toolbar) toolbar.remove();
+            const html = '<!DOCTYPE html>\n' + clone.outerHTML;
+            const blob = new Blob([html], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'resume.html';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+        window.onload = () => { lucide.createIcons(); };
+    </script>
+    <div class="page">
+        <header>
+            <div class="header-content">
+                <h1>Alex Rivera</h1>
+                <div class="header-meta">
+                    <div class="meta-item"><i data-lucide="mail"></i> alex.rivera@example.com</div><div class="meta-item"><i data-lucide="phone"></i> +1 (415) 555-0198</div><div class="meta-item"><i data-lucide="map-pin"></i> San Francisco, CA</div><div class="meta-item"><i data-lucide="linkedin"></i> linkedin.com/in/alexrivera</div>
+                </div>
+            </div>
+        </header>
+
+        <div class="grid">
+            <div class="main-col">
+                
+    <div class="section">
+        <h2 class="section-title">Professional Summary</h2>
+        <div class="summary-text">Visionary Senior Software Engineer with 8+ years of experience in designing scalable microservices and leading cross-functional teams. Passionate about cloud-native architecture, performance optimization, and building robust, user-centric applications. Proven track record of delivering high-impact technical solutions.</div>
+    </div>
+    
+                
+    <div class="section">
+        <h2 class="section-title">Work Experience</h2>
+        
+        <div class="exp-item">
+            <div class="exp-header">
+                <div class="exp-main">
+                    <span class="job-title">Lead Staff Engineer</span>
+                    <span class="company-name">TechNova Solutions</span>
+                </div>
+                <div class="exp-date">Mar 2021 — Present</div>
+            </div>
+            <div class="exp-desc">Spearheaded the migration of a legacy monolithic application to a microservices architecture using Kubernetes and Go.<br>Improved overall system reliability to 99.99% and reduced CI/CD deployment time by 40%.<br>Managed a team of 6 engineers.</div>
+        </div>
+        
+        <div class="exp-item">
+            <div class="exp-header">
+                <div class="exp-main">
+                    <span class="job-title">Software Engineer II</span>
+                    <span class="company-name">CloudScape Systems</span>
+                </div>
+                <div class="exp-date">Jun 2018 — Feb 2021</div>
+            </div>
+            <div class="exp-desc">Developed high-throughput REST APIs using Python and FastAPI, serving over 2M requests daily.<br>Optimized PostgreSQL database queries, reducing average API response time from 200ms to 45ms.</div>
+        </div>
+        
+    </div>
+    
+            </div>
+            <div class="side-col">
+                
+    <div class="side-section">
+        <h3 class="side-title">Education</h3>
+        
+        <div class="side-item">
+            <div class="side-item-title">M.S. in Computer Science</div>
+            <div class="side-item-sub">Stanford University</div>
+            <div class="side-item-meta">2018</div>
+        </div>
+        
+        <div class="side-item">
+            <div class="side-item-title">B.S. in Software Engineering</div>
+            <div class="side-item-sub">UC Berkeley</div>
+            <div class="side-item-meta">2016</div>
+        </div>
+        
+    </div>
+    
+                
+    <div class="side-section">
+        <h3 class="side-title">Skills</h3>
+        <div class="skill-cloud"><span>Python</span><span>Go</span><span>Kubernetes</span><span>PostgreSQL</span><span>AWS Cloud</span><span>System Architecture</span><span>Docker</span><span>React</span><span>Next.js</span><span>GraphQL</span></div>
+    </div>
+    
+            </div>
+        </div>
+    </div>
+</body>
+</html>
