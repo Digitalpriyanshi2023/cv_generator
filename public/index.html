@@ -3,27 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Resume Pro - Dashboard</title>
+    <title>ResumePro | The Ultimate Resume Builder</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <div>
-                <h1>Resume Pro</h1>
-                <p style="color: var(--text-muted)">Craft your elite professional resume</p>
+    <nav class="navbar">
+        <div class="nav-content">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i data-lucide="file-text" style="width: 24px; height: 24px;"></i>
+                </div>
+                <span>Resume<span style="color: var(--primary)">Pro</span></span>
             </div>
-            <a href="editor.html" class="btn btn-primary">
-                <span>+ Create New</span>
-            </a>
+            <div class="nav-links">
+                <a href="editor.html" class="btn btn-primary">
+                    <i data-lucide="plus"></i>
+                    <span>Create New</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="app-container">
+        <header style="margin-bottom: 3rem; text-align: center;">
+            <h1 style="font-size: 3rem; margin-bottom: 1rem;">Your Professional <span style="background: linear-gradient(to right, var(--primary), #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Arsenal</span></h1>
+            <p style="color: var(--text-muted); font-size: 1.1rem;">Manage and edit your high-performance resumes in one place.</p>
         </header>
 
-        <div id="cv-list" class="cv-grid">
-            <!-- CV Cards will be injected here -->
-            <div class="loading">Loading your resumes...</div>
+        <div id="cv-list" class="cv-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 2rem;">
+            <!-- Loading State -->
+            <div id="loading" style="grid-column: 1/-1; text-align: center; padding: 5rem;">
+                <div class="spinner" style="width: 48px; height: 48px; border: 4px solid var(--border); border-top-color: var(--primary); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 1.5rem;"></div>
+                <p style="font-weight: 500; color: var(--text-muted);">Fetching your masterpieces...</p>
+            </div>
         </div>
-    </div>
+    </main>
+
+    <style>
+        @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
 
     <script>
         async function fetchCVs() {
@@ -34,26 +54,68 @@
                 container.innerHTML = '';
 
                 if (cvs.length === 0) {
-                    container.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 3rem;">No resumes found. Click "Create New" to start.</div>';
+                    container.innerHTML = `
+                        <div style="grid-column: 1/-1; text-align: center; padding: 6rem; background: var(--bg-card); border-radius: var(--radius-lg); border: 2px dashed var(--border);">
+                            <div style="width: 80px; height: 80px; background: var(--bg-app); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 2rem;">
+                                <i data-lucide="sparkles" style="width: 40px; height: 40px; color: var(--primary);"></i>
+                            </div>
+                            <h2 style="margin-bottom: 1rem;">No resumes yet</h2>
+                            <p style="color: var(--text-muted); margin-bottom: 2.5rem; max-width: 400px; margin-left: auto; margin-right: auto;">
+                                Launch your career with a stunning resume. Our AI-optimized templates are ready for you.
+                            </p>
+                            <a href="editor.html" class="btn btn-primary btn-lg" style="padding: 1rem 2.5rem; font-size: 1.1rem;">
+                                Create Your First Resume
+                            </a>
+                        </div>
+                    `;
+                    lucide.createIcons();
                     return;
                 }
 
-                cvs.forEach(cv => {
+                cvs.forEach((cv, index) => {
                     const card = document.createElement('div');
                     card.className = 'cv-card';
+                    card.style.animation = `slideIn 0.5s ease-out ${index * 0.1}s forwards`;
+                    card.style.opacity = '0';
                     card.innerHTML = `
-                        <h3>${cv.title || 'Untitled'}</h3>
-                        <p>👤 ${cv.full_name || 'No Name Set'}</p>
-                        <div class="cv-actions">
-                            <a href="editor.html?id=${cv.id}" class="btn btn-secondary">Edit</a>
-                            <button onclick="deleteCV(${cv.id})" class="btn btn-danger">Delete</button>
+                        <div class="flex-between">
+                            <div style="width: 48px; height: 48px; background: var(--bg-app); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--primary);">
+                                <i data-lucide="file-text"></i>
+                            </div>
+                            <div style="font-size: 0.8rem; font-weight: 700; color: var(--success); background: #ecfdf5; padding: 0.25rem 0.75rem; border-radius: 20px;">
+                                ACTIVE
+                            </div>
+                        </div>
+                        <div>
+                            <h3 style="margin-bottom: 0.5rem; font-size: 1.25rem;">${cv.title || 'Untitled Resume'}</h3>
+                            <div style="display: flex; align-items: center; gap: 0.5rem; color: var(--text-muted); font-size: 0.9rem;">
+                                <i data-lucide="user" style="width: 14px; height: 14px;"></i>
+                                <span>${cv.full_name || 'Anonymous User'}</span>
+                            </div>
+                        </div>
+                        <div class="cv-actions" style="display: flex; gap: 1rem; margin-top: 1rem;">
+                            <a href="editor.html?id=${cv.id}" class="btn btn-secondary" style="flex: 1; justify-content: center;">
+                                <i data-lucide="edit-3" style="width: 18px; height: 18px;"></i>
+                                Edit
+                            </a>
+                            <button onclick="deleteCV(${cv.id})" class="btn btn-secondary" style="color: var(--danger); border-color: transparent; background: #fff1f2;">
+                                <i data-lucide="trash-2" style="width: 18px; height: 18px;"></i>
+                            </button>
                         </div>
                     `;
                     container.appendChild(card);
                 });
+                lucide.createIcons();
             } catch (error) {
                 console.error('Error fetching CVs:', error);
-                document.getElementById('cv-list').innerHTML = 'Error loading resumes.';
+                document.getElementById('cv-list').innerHTML = `
+                    <div style="grid-column: 1/-1; text-align: center; padding: 4rem; color: var(--danger);">
+                        <i data-lucide="alert-triangle" style="width: 48px; height: 48px; margin-bottom: 1rem;"></i>
+                        <h3>Connection Error</h3>
+                        <p>Could not reach the high-speed backend. Is the Python server running?</p>
+                    </div>
+                `;
+                lucide.createIcons();
             }
         }
 
@@ -63,11 +125,14 @@
                 const response = await fetch(`/api/cvs/${id}`, { method: 'DELETE' });
                 if (response.ok) fetchCVs();
             } catch (error) {
-                console.error('Error deleting CV:', error);
+                alert('Failed to delete resume.');
             }
         }
 
-        window.onload = fetchCVs;
+        window.onload = () => {
+            fetchCVs();
+            lucide.createIcons();
+        };
     </script>
 </body>
 </html>

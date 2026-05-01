@@ -1,51 +1,36 @@
-def get_qt_html(cv_data):
-    """Generates basic HTML compatible with QTextBrowser for live preview."""
-    theme = cv_data.get('template', 'Classic')
-    accent = "#6366f1" if theme == "Colorful" else "#0f172a"
-    
-    html = f"""
-    <div style="font-family: 'Inter', sans-serif; padding: 25px; color: #1e293b; background: white;">
-        <div style="border-left: 8px solid {accent}; padding-left: 20px; margin-bottom: 30px;">
-            <h1 style="margin: 0; color: {accent}; font-size: 32px; font-weight: 900; text-transform: uppercase; letter-spacing: -1px;">{cv_data.get('full_name', 'Your Name') or 'Your Name'}</h1>
-            <p style="margin: 8px 0 0 0; font-size: 14px; color: #64748b; font-weight: 600;">
-                {cv_data.get('email', '')} &bull; {cv_data.get('phone', '')}
-            </p>
-        </div>
-        <div style="font-size: 13px; line-height: 1.6; color: #334155;">
-            {cv_data.get('summary', 'Start typing your profile summary...')}
-        </div>
-    </div>
-    """
-    return html
-
-
 def get_web_html(cv_data):
     """Generates an ultra-premium, full-page designer HTML resume optimized for PDF export."""
     theme = cv_data.get('template', 'Classic')
     
     themes = {
         "Classic": {
-            "primary": "#0f172a", "secondary": "#64748b", "accent": "#f8fafc",
-            "font_main": "'Inter', sans-serif", "font_head": "'Playfair Display', serif",
-            "header_bg": "#ffffff", "border_color": "#0f172a"
+            "primary": "#1e293b", "secondary": "#64748b", "accent": "#f1f5f9",
+            "font_main": "'Inter', sans-serif", "font_head": "'Inter', sans-serif",
+            "header_bg": "#ffffff", "border_color": "#1e293b", "sidebar_bg": "#f8fafc"
         },
         "Formal": {
-            "primary": "#1a365d", "secondary": "#2d3748", "accent": "#f7fafc",
+            "primary": "#0f172a", "secondary": "#475569", "accent": "#f1f5f9",
             "font_main": "'Inter', sans-serif", "font_head": "'Inter', sans-serif",
-            "header_bg": "#f8fafc", "border_color": "#1a365d"
+            "header_bg": "#f1f5f9", "border_color": "#0f172a", "sidebar_bg": "#ffffff"
+        },
+        "Modern": {
+            "primary": "#6366f1", "secondary": "#4f46e5", "accent": "#eef2ff",
+            "font_main": "'Inter', sans-serif", "font_head": "'Outfit', sans-serif",
+            "header_bg": "#ffffff", "border_color": "#6366f1", "sidebar_bg": "#ffffff"
         },
         "Colorful": {
-            "primary": "#4338ca", "secondary": "#6366f1", "accent": "#f5f3ff",
-            "font_main": "'Plus Jakarta Sans', sans-serif", "font_head": "'Plus Jakarta Sans', sans-serif",
-            "header_bg": "#f5f3ff", "border_color": "#4338ca"
+            "primary": "#4f46e5", "secondary": "#6366f1", "accent": "#f5f3ff",
+            "font_main": "'Inter', sans-serif", "font_head": "'Inter', sans-serif",
+            "header_bg": "#4f46e5", "border_color": "#4f46e5", "sidebar_bg": "#ffffff", "header_text": "#ffffff"
         }
     }
     t = themes.get(theme, themes["Classic"])
+    header_text_color = t.get('header_text', t['primary'])
 
-    # Pre-build sections with more "Space Consumption" (larger margins/paddings)
+    # Sections builder
     summary_html = f'''
     <div class="section">
-        <h2 class="section-title">Professional Executive Summary</h2>
+        <h2 class="section-title">Professional Summary</h2>
         <div class="summary-text">{cv_data.get('summary', '')}</div>
     </div>
     ''' if cv_data.get('summary') else ''
@@ -57,17 +42,17 @@ def get_web_html(cv_data):
         <div class="exp-item">
             <div class="exp-header">
                 <div class="exp-main">
-                    <span class="job-title">{exp.get('job_title', '')}</span>
-                    <span class="company-name">{exp.get('company', '')}</span>
+                    <span class="job-title">{exp.get('job_title', 'Job Title')}</span>
+                    <span class="company-name">{exp.get('company', 'Company Name')}</span>
                 </div>
-                <div class="exp-date">{exp.get('start_date', '')} — {exp.get('end_date', '')}</div>
+                <div class="exp-date">{exp.get('start_date', '')} — {exp.get('end_date', 'Present')}</div>
             </div>
             <div class="exp-desc">{desc}</div>
         </div>
         """
     experience_html = f'''
     <div class="section">
-        <h2 class="section-title">Professional Work History</h2>
+        <h2 class="section-title">Work Experience</h2>
         {experience_items}
     </div>
     ''' if experience_items else ''
@@ -76,8 +61,8 @@ def get_web_html(cv_data):
     for edu in cv_data.get('education', []):
         education_items += f"""
         <div class="side-item">
-            <div class="side-item-title">{edu.get('degree', '')}</div>
-            <div class="side-item-sub">{edu.get('institution', '')}</div>
+            <div class="side-item-title">{edu.get('degree', 'Degree')}</div>
+            <div class="side-item-sub">{edu.get('institution', 'Institution')}</div>
             <div class="side-item-meta">{edu.get('year', '')}</div>
         </div>
         """
@@ -88,10 +73,14 @@ def get_web_html(cv_data):
     </div>
     ''' if education_items else ''
 
-    skill_tags = "".join([f'<span>{s}</span>' for s in cv_data.get('skills', [])])
+    skills_raw = cv_data.get('skills', [])
+    if isinstance(skills_raw, str):
+        skills_raw = [s.strip() for s in skills_raw.split(',') if s.strip()]
+    
+    skill_tags = "".join([f'<span>{s}</span>' for s in skills_raw])
     skills_html = f'''
     <div class="side-section">
-        <h3 class="side-title">Technical Expertise</h3>
+        <h3 class="side-title">Skills</h3>
         <div class="skill-cloud">{skill_tags}</div>
     </div>
     ''' if skill_tags else ''
@@ -100,28 +89,26 @@ def get_web_html(cv_data):
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>{cv_data.get('full_name', 'Professional_Resume')}</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Playfair+Display:wght@700;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>{cv_data.get('full_name', 'Resume')}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Outfit:wght@700;800&display=swap" rel="stylesheet">
     <style>
         :root {{
             --primary: {t['primary']};
             --secondary: {t['secondary']};
             --accent: {t['accent']};
+            --header-text: {header_text_color};
         }}
         * {{ box-sizing: border-box; -webkit-print-color-adjust: exact; }}
         
-        @page {{
-            size: A4;
-            margin: 0;
-        }}
+        @page {{ size: A4; margin: 0; }}
 
         body {{
-            background: #f1f5f9;
-            font-family: {t['font_main']};
+            background: #cbd5e1;
+            font-family: 'Inter', sans-serif;
             color: #1e293b;
             margin: 0;
             padding: 40px 0;
-            line-height: 1.8;
+            line-height: 1.5;
         }}
 
         .page {{
@@ -129,158 +116,132 @@ def get_web_html(cv_data):
             min-height: 297mm;
             margin: 0 auto;
             background: white;
-            box-shadow: 0 40px 100px rgba(0,0,0,0.15);
+            box-shadow: 0 40px 100px rgba(0,0,0,0.1);
             display: flex;
             flex-direction: column;
-            position: relative;
+            overflow: hidden;
         }}
 
         @media print {{
             body {{ background: white; padding: 0; }}
-            .page {{ box-shadow: none; margin: 0; width: 100%; border: none; }}
+            .page {{ box-shadow: none; margin: 0; width: 100%; }}
             .no-print {{ display: none !important; }}
         }}
 
-        /* Header - Full Width & Bold */
         header {{
-            padding: 80px 80px;
+            padding: 60px 80px;
             background: {t['header_bg']};
-            border-bottom: 12px solid var(--primary);
-            position: relative;
-        }}
-        header::after {{
-            content: '';
-            position: absolute;
-            right: 80px;
-            bottom: -12px;
-            width: 150px;
-            height: 12px;
-            background: #cbd5e1;
+            border-bottom: 8px solid var(--primary);
+            color: var(--header-text);
         }}
         header h1 {{
             margin: 0;
-            font-family: {t['font_head']};
-            font-size: 64px;
-            font-weight: 900;
-            color: var(--primary);
-            line-height: 1;
-            letter-spacing: -3px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 48px;
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -2px;
             text-transform: uppercase;
         }}
         .header-meta {{
-            margin-top: 25px;
+            margin-top: 20px;
             display: flex;
-            gap: 30px;
-            font-size: 16px;
-            font-weight: 700;
-            color: var(--secondary);
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            flex-wrap: wrap;
+            gap: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            opacity: 0.9;
         }}
 
-        /* Main Content Grid */
         .grid {{
             display: grid;
-            grid-template-columns: 2fr 1fr;
+            grid-template-columns: 1.8fr 1fr;
             flex-grow: 1;
         }}
 
-        /* Left Column */
-        .main-col {{
-            padding: 60px 50px 60px 80px;
+        .main-col {{ padding: 50px 40px 50px 80px; }}
+        .side-col {{
+            background: {t['sidebar_bg']};
+            padding: 50px 60px 50px 40px;
+            border-left: 1px solid #e2e8f0;
         }}
-        .section {{ margin-bottom: 60px; break-inside: avoid; }}
+
+        .section {{ margin-bottom: 40px; }}
         .section-title {{
-            font-size: 20px;
-            font-weight: 900;
+            font-size: 16px;
+            font-weight: 800;
             color: var(--primary);
             text-transform: uppercase;
             letter-spacing: 2px;
-            margin-bottom: 30px;
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }}
-        .section-title::after {{
-            content: '';
-            flex-grow: 1;
-            height: 2px;
-            background: #f1f5f9;
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--accent);
+            padding-bottom: 8px;
         }}
 
-        .summary-text {{ font-size: 16px; color: #334155; text-align: justify; }}
+        .summary-text {{ font-size: 14px; color: #334155; text-align: justify; }}
         
-        .exp-item {{ margin-bottom: 40px; }}
-        .exp-header {{ display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }}
-        .exp-main {{ display: flex; flex-direction: column; }}
-        .job-title {{ font-size: 22px; font-weight: 800; color: #0f172a; line-height: 1.2; }}
-        .company-name {{ font-size: 17px; font-weight: 600; color: var(--primary); margin-top: 5px; }}
-        .exp-date {{ font-size: 14px; font-weight: 800; color: var(--secondary); white-space: nowrap; }}
-        .exp-desc {{ font-size: 15.5px; color: #475569; line-height: 1.7; }}
+        .exp-item {{ margin-bottom: 25px; }}
+        .exp-header {{ display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }}
+        .job-title {{ font-size: 18px; font-weight: 700; color: #0f172a; display: block; }}
+        .company-name {{ font-size: 15px; font-weight: 600; color: var(--primary); }}
+        .exp-date {{ font-size: 12px; font-weight: 700; color: var(--secondary); white-space: nowrap; }}
+        .exp-desc {{ font-size: 13.5px; color: #475569; line-height: 1.6; }}
 
-        /* Right Column (Sidebar) */
-        .side-col {{
-            background: #f8fafc;
-            padding: 60px 60px 60px 40px;
-            border-left: 1px solid #e2e8f0;
-        }}
-        .side-section {{ margin-bottom: 50px; }}
+        .side-section {{ margin-bottom: 35px; }}
         .side-title {{
-            font-size: 16px;
-            font-weight: 900;
+            font-size: 14px;
+            font-weight: 800;
             color: var(--primary);
             text-transform: uppercase;
             letter-spacing: 1.5px;
-            margin-bottom: 25px;
+            margin-bottom: 15px;
         }}
-        .side-item {{ margin-bottom: 25px; }}
-        .side-item-title {{ font-size: 16px; font-weight: 700; color: #0f172a; }}
-        .side-item-sub {{ font-size: 15px; color: var(--secondary); font-weight: 500; margin-top: 2px; }}
-        .side-item-meta {{ font-size: 13px; color: #94a3b8; font-weight: 600; margin-top: 4px; }}
+        .side-item {{ margin-bottom: 20px; }}
+        .side-item-title {{ font-size: 14px; font-weight: 700; color: #0f172a; }}
+        .side-item-sub {{ font-size: 13px; color: var(--secondary); font-weight: 500; margin-top: 2px; }}
+        .side-item-meta {{ font-size: 12px; color: #94a3b8; font-weight: 600; margin-top: 4px; }}
 
-        .skill-cloud {{ display: flex; flex-wrap: wrap; gap: 10px; }}
+        .skill-cloud {{ display: flex; flex-wrap: wrap; gap: 8px; }}
         .skill-cloud span {{
             background: white;
             color: var(--primary);
-            padding: 8px 16px;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
             border: 1px solid #e2e8f0;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
         }}
 
-        /* Floating Tool Bar */
         .toolbar {{
             position: fixed;
-            bottom: 40px;
+            bottom: 30px;
             left: 50%;
             transform: translateX(-50%);
             background: #0f172a;
-            padding: 12px 24px;
-            border-radius: 100px;
+            padding: 10px 20px;
+            border-radius: 50px;
             display: flex;
-            gap: 15px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-            z-index: 9999;
+            gap: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            z-index: 1000;
         }}
         .tool-btn {{
             background: #6366f1;
             color: white;
             border: none;
-            padding: 12px 30px;
-            border-radius: 100px;
-            font-weight: 800;
-            font-size: 15px;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 13px;
             cursor: pointer;
             transition: all 0.2s;
         }}
-        .tool-btn:hover {{ transform: translateY(-2px); box-shadow: 0 10px 20px rgba(99, 102, 241, 0.4); }}
+        .tool-btn:hover {{ transform: translateY(-2px); box-shadow: 0 5px 15px rgba(99, 102, 241, 0.4); }}
     </style>
 </head>
 <body>
     <div class="toolbar no-print">
-        <button class="tool-btn" onclick="window.print()">📥 SAVE AS PDF / PRINT</button>
+        <button class="tool-btn" onclick="window.print()">📥 SAVE AS PDF</button>
     </div>
     <div class="page">
         <header>
@@ -288,6 +249,8 @@ def get_web_html(cv_data):
             <div class="header-meta">
                 <span>{cv_data.get('email', '')}</span>
                 <span>{cv_data.get('phone', '')}</span>
+                <span>{cv_data.get('address', '')}</span>
+                <span>{cv_data.get('linkedin', '')}</span>
             </div>
         </header>
 
@@ -302,15 +265,8 @@ def get_web_html(cv_data):
             </div>
         </div>
     </div>
-    <script>
-        // Auto-trigger print dialog for a seamless "Save as PDF" experience
-        window.onload = function() {{
-            setTimeout(function() {{
-                window.print();
-            }}, 500);
-        }};
-    </script>
 </body>
 </html>
 """
     return html
+
