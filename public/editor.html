@@ -8,151 +8,139 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@700;800&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
-<body style="height: 100vh; display: flex; flex-direction: column; overflow: hidden;">
-    <nav class="navbar">
-        <div class="nav-content">
-            <div class="flex-between" style="width: 100%;">
-                <div style="display: flex; align-items: center; gap: 1.5rem;">
-                    <a href="index.html" class="btn btn-secondary" style="padding: 0.5rem 1rem;">
-                        <i data-lucide="arrow-left"></i>
-                        <span>Dashboard</span>
-                    </a>
-                    <div style="height: 24px; width: 1px; background: var(--border);"></div>
-                    <div class="logo" style="font-size: 1.2rem;">
-                        <span>Editor<span style="color: var(--primary)">.pro</span></span>
-                    </div>
-                </div>
-                <div style="display: flex; gap: 1rem;">
-                    <div id="status-badge" style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.8rem; font-weight: 600; color: var(--text-muted); background: var(--bg-app); padding: 0.5rem 1rem; border-radius: 20px;">
-                        <div style="width: 8px; height: 8px; border-radius: 50%; background: var(--success);"></div>
-                        ALL SAVED
-                    </div>
-                    <button onclick="saveCV()" class="btn btn-primary">
-                        <i data-lucide="save"></i>
-                        <span>Save Changes</span>
-                    </button>
-                </div>
+<body style="height: 100vh; display: flex; flex-direction: column; overflow: hidden; background: var(--slate-900);">
+    
+    <div class="nav-shell" style="margin-top: 1rem;">
+        <nav class="navbar" style="background: rgba(15, 23, 42, 0.8); border-color: rgba(255,255,255,0.1);">
+            <div style="display: flex; align-items: center; gap: 1.5rem;">
+                <a href="index.html" class="btn btn-ghost" style="padding: 0.5rem 1rem; color: white;">
+                    <i data-lucide="arrow-left" style="width: 18px;"></i>
+                    <span>Dashboard</span>
+                </a>
+                <div style="height: 24px; width: 1px; background: rgba(255,255,255,0.1);"></div>
+                <h2 style="font-size: 1.25rem; color: white;">Editor<span style="color: var(--p-500)">.ai</span></h2>
             </div>
-        </div>
-    </nav>
+            
+            <div style="display: flex; gap: 1rem; align-items: center;">
+                <div id="save-status" style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.75rem; font-weight: 800; color: #94a3b8; letter-spacing: 0.1em; text-transform: uppercase;">
+                    <div class="active-pulse" style="width: 8px; height: 8px;"></div>
+                    Syncing...
+                </div>
+                <button onclick="saveCV()" id="save-btn" class="btn btn-primary">
+                    <i data-lucide="check-circle" style="width: 18px;"></i>
+                    <span>Save Project</span>
+                </button>
+            </div>
+        </nav>
+    </div>
 
-    <main class="editor-grid" style="flex: 1; padding: 1.5rem; margin: 0; max-width: none;">
-        <!-- Left: Form -->
-        <aside class="editor-sidebar">
-            <div class="sidebar-content" id="editor-form">
-                <section class="section-card">
-                    <div class="section-title">
-                        <i data-lucide="settings" style="width: 20px;"></i>
-                        <h3>Resume Settings</h3>
+    <main class="editor-workspace">
+        <!-- Input Section -->
+        <div class="editor-pane">
+            <div class="pane-scroll" id="form-root">
+                
+                <div class="section-head">
+                    <div style="width: 40px; height: 40px; background: var(--slate-100); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--p-500);">
+                        <i data-lucide="sliders" style="width: 20px;"></i>
                     </div>
-                    <div class="input-group">
-                        <label>Resume Title (Internal Name)</label>
-                        <input type="text" id="cv-title" placeholder="e.g. Senior Software Engineer 2024" oninput="debouncedPreview()">
-                    </div>
-                    <div class="input-group">
-                        <label>Visual Template</label>
-                        <select id="cv-template" onchange="debouncedPreview()">
-                            <option value="Classic">Classic Corporate</option>
-                            <option value="Formal">Formal Executive</option>
-                            <option value="Modern">Modern Minimalist</option>
-                            <option value="Colorful">Vibrant Professional</option>
-                        </select>
-                    </div>
-                </section>
+                    <h3 style="font-size: 1.25rem;">Core Configuration</h3>
+                </div>
 
-                <section class="section-card">
-                    <div class="section-title">
+                <div class="field-group">
+                    <label>Project Name</label>
+                    <input type="text" id="cv-title" placeholder="e.g. Google Application 2024" oninput="debouncedPreview()">
+                </div>
+
+                <div class="field-group">
+                    <label>Design Language</label>
+                    <select id="cv-template" onchange="debouncedPreview()">
+                        <option value="Classic">Classic Corporate</option>
+                        <option value="Formal">Formal Executive</option>
+                        <option value="Modern">Modern Minimalist</option>
+                        <option value="Colorful">Vibrant Professional</option>
+                    </select>
+                </div>
+
+                <!-- Personal Info -->
+                <div class="section-head" style="margin-top: 3rem;">
+                    <div style="width: 40px; height: 40px; background: var(--slate-100); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--p-500);">
                         <i data-lucide="user" style="width: 20px;"></i>
-                        <h3>Personal Details</h3>
                     </div>
-                    <div class="input-group">
-                        <label>Full Name</label>
-                        <input type="text" id="full_name" placeholder="John Doe" oninput="debouncedPreview()">
+                    <h3 style="font-size: 1.25rem;">Identity</h3>
+                </div>
+
+                <div class="field-group">
+                    <label>Full Name</label>
+                    <input type="text" id="full_name" placeholder="Alex Rivera" oninput="debouncedPreview()">
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 2rem;">
+                    <div class="field-group" style="margin-bottom: 0;">
+                        <label>Email</label>
+                        <input type="email" id="email" placeholder="alex@work.com" oninput="debouncedPreview()">
                     </div>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                        <div class="input-group">
-                            <label>Email</label>
-                            <input type="email" id="email" placeholder="john@example.com" oninput="debouncedPreview()">
-                        </div>
-                        <div class="input-group">
-                            <label>Phone</label>
-                            <input type="text" id="phone" placeholder="+1 (555) 000-0000" oninput="debouncedPreview()">
-                        </div>
+                    <div class="field-group" style="margin-bottom: 0;">
+                        <label>Phone</label>
+                        <input type="text" id="phone" placeholder="+1 234 567 890" oninput="debouncedPreview()">
                     </div>
-                    <div class="input-group">
-                        <label>Location / Address</label>
-                        <input type="text" id="address" placeholder="New York, NY" oninput="debouncedPreview()">
-                    </div>
-                    <div class="input-group">
-                        <label>LinkedIn URL</label>
-                        <input type="text" id="linkedin" placeholder="linkedin.com/in/johndoe" oninput="debouncedPreview()">
-                    </div>
-                    <div class="input-group">
-                        <label>Professional Summary</label>
-                        <textarea id="summary" rows="4" placeholder="Briefly describe your expertise..." oninput="debouncedPreview()"></textarea>
-                    </div>
-                </section>
+                </div>
+
+                <div class="field-group">
+                    <label>Professional Bio</label>
+                    <textarea id="summary" rows="5" placeholder="Highlight your biggest wins..." oninput="debouncedPreview()"></textarea>
+                </div>
 
                 <!-- Experience -->
-                <section class="section-card">
-                    <div class="flex-between" style="margin-bottom: 1.25rem;">
-                        <div class="section-title" style="margin-bottom: 0;">
+                <div class="section-head" style="margin-top: 3rem; justify-content: space-between;">
+                    <div style="display: flex; align-items: center; gap: 1rem;">
+                        <div style="width: 40px; height: 40px; background: var(--slate-100); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--p-500);">
                             <i data-lucide="briefcase" style="width: 20px;"></i>
-                            <h3>Experience</h3>
                         </div>
-                        <button onclick="addExperience()" class="btn btn-secondary" style="padding: 0.4rem 0.8rem; font-size: 0.8rem;">
-                            <i data-lucide="plus" style="width: 14px;"></i> Add
-                        </button>
+                        <h3 style="font-size: 1.25rem;">Career History</h3>
                     </div>
-                    <div id="experience-list"></div>
-                </section>
-
-                <!-- Education -->
-                <section class="section-card">
-                    <div class="flex-between" style="margin-bottom: 1.25rem;">
-                        <div class="section-title" style="margin-bottom: 0;">
-                            <i data-lucide="graduation-cap" style="width: 20px;"></i>
-                            <h3>Education</h3>
-                        </div>
-                        <button onclick="addEducation()" class="btn btn-secondary" style="padding: 0.4rem 0.8rem; font-size: 0.8rem;">
-                            <i data-lucide="plus" style="width: 14px;"></i> Add
-                        </button>
-                    </div>
-                    <div id="education-list"></div>
-                </section>
-
-                <!-- Skills -->
-                <section class="section-card">
-                    <div class="section-title">
-                        <i data-lucide="award" style="width: 20px;"></i>
-                        <h3>Skills</h3>
-                    </div>
-                    <div class="input-group">
-                        <label>Key Skills (Comma separated)</label>
-                        <textarea id="skills" rows="3" placeholder="React, Python, Project Management, UI Design..." oninput="debouncedPreview()"></textarea>
-                    </div>
-                </section>
-            </div>
-        </aside>
-
-        <!-- Right: Preview -->
-        <div class="preview-container">
-            <div class="preview-header">
-                <div style="display: flex; gap: 0.75rem;">
-                    <div style="width: 12px; height: 12px; border-radius: 50%; background: #ff5f56;"></div>
-                    <div style="width: 12px; height: 12px; border-radius: 50%; background: #ffbd2e;"></div>
-                    <div style="width: 12px; height: 12px; border-radius: 50%; background: #27c93f;"></div>
-                </div>
-                <div style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted); letter-spacing: 0.1em; text-transform: uppercase;">
-                    Live Interactive Preview
-                </div>
-                <div style="display: flex; gap: 0.5rem;">
-                    <button onclick="updatePreview()" class="btn btn-secondary" style="padding: 0.4rem; border-radius: 6px;">
-                        <i data-lucide="refresh-cw" style="width: 16px;"></i>
+                    <button onclick="addExperience()" class="btn btn-ghost" style="padding: 0.5rem 1rem; font-size: 0.75rem;">
+                        <i data-lucide="plus" style="width: 14px;"></i> ADD
                     </button>
                 </div>
+                <div id="experience-list"></div>
+
+                <!-- Education -->
+                <div class="section-head" style="margin-top: 3rem; justify-content: space-between;">
+                    <div style="display: flex; align-items: center; gap: 1rem;">
+                        <div style="width: 40px; height: 40px; background: var(--slate-100); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--p-500);">
+                            <i data-lucide="graduation-cap" style="width: 20px;"></i>
+                        </div>
+                        <h3 style="font-size: 1.25rem;">Academic Path</h3>
+                    </div>
+                    <button onclick="addEducation()" class="btn btn-ghost" style="padding: 0.5rem 1rem; font-size: 0.75rem;">
+                        <i data-lucide="plus" style="width: 14px;"></i> ADD
+                    </button>
+                </div>
+                <div id="education-list"></div>
+
+                <!-- Skills -->
+                <div class="section-head" style="margin-top: 3rem;">
+                    <div style="width: 40px; height: 40px; background: var(--slate-100); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--p-500);">
+                        <i data-lucide="zap" style="width: 20px;"></i>
+                    </div>
+                    <h3 style="font-size: 1.25rem;">Core Arsenal</h3>
+                </div>
+                <div class="field-group">
+                    <label>Skill Tags (Comma separated)</label>
+                    <textarea id="skills" rows="3" placeholder="React, Python, Cloud Arch, Strategy..." oninput="debouncedPreview()"></textarea>
+                </div>
+
             </div>
-            <iframe id="preview-frame" title="CV Preview"></iframe>
+        </div>
+
+        <!-- Preview Section -->
+        <div class="preview-pane">
+            <div style="position: absolute; top: 1.5rem; right: 1.5rem; z-index: 10;">
+                <button onclick="updatePreview()" class="btn btn-primary" style="padding: 0.6rem; border-radius: 50%; width: 44px; height: 44px; justify-content: center;">
+                    <i data-lucide="refresh-cw" style="width: 20px;"></i>
+                </button>
+            </div>
+            <iframe id="preview-frame" style="width: 100%; height: 100%; border: none; background: white;"></iframe>
         </div>
     </main>
 
@@ -162,11 +150,11 @@
 
         function debouncedPreview() {
             clearTimeout(previewTimeout);
-            document.getElementById('status-badge').innerHTML = '<div class="spinner-tiny"></div> SAVING...';
+            document.getElementById('save-status').innerHTML = '<div class="spinner-tiny"></div> SYNCING';
             previewTimeout = setTimeout(() => {
                 updatePreview();
-                document.getElementById('status-badge').innerHTML = '<div style="width: 8px; height: 8px; border-radius: 50%; background: var(--success);"></div> ALL SAVED';
-            }, 1000);
+                document.getElementById('save-status').innerHTML = '<div class="active-pulse"></div> SYNCED';
+            }, 1200);
         }
 
         async function init() {
@@ -185,49 +173,38 @@
             document.getElementById('full_name').value = data.full_name || '';
             document.getElementById('email').value = data.email || '';
             document.getElementById('phone').value = data.phone || '';
-            document.getElementById('address').value = data.address || '';
-            document.getElementById('linkedin').value = data.linkedin || '';
             document.getElementById('summary').value = data.summary || '';
             document.getElementById('skills').value = (data.skills || []).join(', ');
 
-            if (data.experience) {
-                data.experience.forEach(exp => addExperience(exp));
-            }
-            if (data.education) {
-                data.education.forEach(edu => addEducation(edu));
-            }
+            if (data.experience) data.experience.forEach(exp => addExperience(exp));
+            if (data.education) data.education.forEach(edu => addEducation(edu));
         }
 
         function addExperience(data = {}) {
             const container = document.getElementById('experience-list');
             const div = document.createElement('div');
-            div.className = 'dynamic-item';
+            div.className = 'field-group';
+            div.style.background = 'var(--slate-100)';
+            div.style.padding = '1.5rem';
+            div.style.borderRadius = 'var(--radius-sm)';
+            div.style.position = 'relative';
             div.innerHTML = `
-                <button class="btn" style="position: absolute; top: 0.5rem; right: 0.5rem; color: var(--danger); padding: 0.25rem;" onclick="this.parentElement.remove(); debouncedPreview()">
-                    <i data-lucide="x" style="width: 16px;"></i>
+                <button onclick="this.parentElement.remove(); debouncedPreview()" style="position: absolute; top: 0.75rem; right: 0.75rem; border: none; background: none; color: var(--slate-400); cursor: pointer;">
+                    <i data-lucide="x-circle" style="width: 20px;"></i>
                 </button>
-                <div class="input-group">
-                    <label>Job Title</label>
+                <div class="field-group" style="margin-bottom: 1rem;">
+                    <label>Role</label>
                     <input type="text" class="exp-title" value="${data.job_title || ''}" oninput="debouncedPreview()">
                 </div>
-                <div class="input-group">
-                    <label>Company</label>
+                <div class="field-group" style="margin-bottom: 1rem;">
+                    <label>Organization</label>
                     <input type="text" class="exp-company" value="${data.company || ''}" oninput="debouncedPreview()">
                 </div>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                    <div class="input-group">
-                        <label>Start</label>
-                        <input type="text" class="exp-start" value="${data.start_date || ''}" oninput="debouncedPreview()">
-                    </div>
-                    <div class="input-group">
-                        <label>End</label>
-                        <input type="text" class="exp-end" value="${data.end_date || ''}" oninput="debouncedPreview()">
-                    </div>
+                    <input type="text" class="exp-start" placeholder="Start Date" value="${data.start_date || ''}" oninput="debouncedPreview()">
+                    <input type="text" class="exp-end" placeholder="End Date" value="${data.end_date || ''}" oninput="debouncedPreview()">
                 </div>
-                <div class="input-group" style="margin-bottom: 0;">
-                    <label>Description</label>
-                    <textarea class="exp-desc" rows="3" oninput="debouncedPreview()">${data.description || ''}</textarea>
-                </div>
+                <textarea class="exp-desc" rows="3" placeholder="Achievements..." style="margin-top: 1rem;" oninput="debouncedPreview()">${data.description || ''}</textarea>
             `;
             container.appendChild(div);
             lucide.createIcons();
@@ -236,30 +213,31 @@
         function addEducation(data = {}) {
             const container = document.getElementById('education-list');
             const div = document.createElement('div');
-            div.className = 'dynamic-item';
+            div.className = 'field-group';
+            div.style.background = 'var(--slate-100)';
+            div.style.padding = '1.5rem';
+            div.style.borderRadius = 'var(--radius-sm)';
+            div.style.position = 'relative';
             div.innerHTML = `
-                <button class="btn" style="position: absolute; top: 0.5rem; right: 0.5rem; color: var(--danger); padding: 0.25rem;" onclick="this.parentElement.remove(); debouncedPreview()">
-                    <i data-lucide="x" style="width: 16px;"></i>
+                <button onclick="this.parentElement.remove(); debouncedPreview()" style="position: absolute; top: 0.75rem; right: 0.75rem; border: none; background: none; color: var(--slate-400); cursor: pointer;">
+                    <i data-lucide="x-circle" style="width: 20px;"></i>
                 </button>
-                <div class="input-group">
+                <div class="field-group" style="margin-bottom: 1rem;">
                     <label>Degree</label>
                     <input type="text" class="edu-degree" value="${data.degree || ''}" oninput="debouncedPreview()">
                 </div>
-                <div class="input-group">
-                    <label>Institution</label>
+                <div class="field-group" style="margin-bottom: 1rem;">
+                    <label>Institute</label>
                     <input type="text" class="edu-institution" value="${data.institution || ''}" oninput="debouncedPreview()">
                 </div>
-                <div class="input-group" style="margin-bottom: 0;">
-                    <label>Year</label>
-                    <input type="text" class="edu-year" value="${data.year || ''}" oninput="debouncedPreview()">
-                </div>
+                <input type="text" class="edu-year" placeholder="Graduation Year" value="${data.year || ''}" oninput="debouncedPreview()">
             `;
             container.appendChild(div);
             lucide.createIcons();
         }
 
         function collectData() {
-            const experience = Array.from(document.querySelectorAll('#experience-list .dynamic-item')).map(item => ({
+            const experience = Array.from(document.querySelectorAll('#experience-list .field-group')).map(item => ({
                 job_title: item.querySelector('.exp-title').value,
                 company: item.querySelector('.exp-company').value,
                 start_date: item.querySelector('.exp-start').value,
@@ -267,7 +245,7 @@
                 description: item.querySelector('.exp-desc').value
             }));
 
-            const education = Array.from(document.querySelectorAll('#education-list .dynamic-item')).map(item => ({
+            const education = Array.from(document.querySelectorAll('#education-list .field-group')).map(item => ({
                 degree: item.querySelector('.edu-degree').value,
                 institution: item.querySelector('.edu-institution').value,
                 year: item.querySelector('.edu-year').value
@@ -280,8 +258,6 @@
                 full_name: document.getElementById('full_name').value,
                 email: document.getElementById('email').value,
                 phone: document.getElementById('phone').value,
-                address: document.getElementById('address').value,
-                linkedin: document.getElementById('linkedin').value,
                 summary: document.getElementById('summary').value,
                 skills: document.getElementById('skills').value.split(',').map(s => s.trim()).filter(s => s),
                 experience,
@@ -304,6 +280,10 @@
         }
 
         async function saveCV() {
+            const btn = document.getElementById('save-btn');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<div class="spinner-tiny"></div> PERSISTING...';
+            
             const data = collectData();
             const response = await fetch('/api/cvs', {
                 method: 'POST',
@@ -311,24 +291,23 @@
                 body: JSON.stringify(data)
             });
             const result = await response.json();
+            
             if (result.cv_id && !cvId) {
                 window.location.href = `editor.html?id=${result.cv_id}`;
             } else if (result.status === 'success') {
-                alert('Project saved to secure vault.');
+                btn.innerHTML = '<i data-lucide="check" style="width: 18px;"></i> SAVED';
+                setTimeout(() => { btn.innerHTML = originalText; lucide.createIcons(); }, 2000);
+            } else {
+                alert('Persistence failure. Check terminal logs.');
+                btn.innerHTML = originalText;
+                lucide.createIcons();
             }
         }
 
         init();
     </script>
     <style>
-        .spinner-tiny {
-            width: 12px;
-            height: 12px;
-            border: 2px solid var(--border);
-            border-top-color: var(--primary);
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-        }
+        .spinner-tiny { width: 14px; height: 14px; border: 2px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 0.8s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
     </style>
 </body>

@@ -3,40 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ResumePro | The Ultimate Resume Builder</title>
+    <title>ResumePro | Designer Dashboard</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@700;800&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
-    <nav class="navbar">
-        <div class="nav-content">
-            <div class="logo">
-                <div class="logo-icon">
-                    <i data-lucide="file-text" style="width: 24px; height: 24px;"></i>
+    <div class="nav-shell">
+        <nav class="navbar">
+            <div class="logo-wrap">
+                <div class="logo-mark">
+                    <i data-lucide="sparkles" style="width: 24px; height: 24px;"></i>
                 </div>
-                <span>Resume<span style="color: var(--primary)">Pro</span></span>
+                <h2 style="font-size: 1.5rem;">Resume<span style="color: var(--p-500)">Pro</span></h2>
             </div>
-            <div class="nav-links">
+            <div style="display: flex; gap: 1rem; align-items: center;">
                 <a href="editor.html" class="btn btn-primary">
-                    <i data-lucide="plus"></i>
+                    <i data-lucide="plus-circle"></i>
                     <span>Create New</span>
                 </a>
             </div>
+        </nav>
+    </div>
+
+    <main class="main-view">
+        <div class="hero-section">
+            <h1>Elevate Your <br> Professional <span style="color: var(--p-500)">Presence</span></h1>
+            <p style="font-size: 1.25rem; color: var(--text-muted); max-width: 600px; margin: 0 auto;">
+                Your career deserves more than a standard template. Build designer-grade resumes that get noticed.
+            </p>
         </div>
-    </nav>
 
-    <main class="app-container">
-        <header style="margin-bottom: 3rem; text-align: center;">
-            <h1 style="font-size: 3rem; margin-bottom: 1rem;">Your Professional <span style="background: linear-gradient(to right, var(--primary), #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Arsenal</span></h1>
-            <p style="color: var(--text-muted); font-size: 1.1rem;">Manage and edit your high-performance resumes in one place.</p>
-        </header>
-
-        <div id="cv-list" class="cv-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 2rem;">
-            <!-- Loading State -->
-            <div id="loading" style="grid-column: 1/-1; text-align: center; padding: 5rem;">
-                <div class="spinner" style="width: 48px; height: 48px; border: 4px solid var(--border); border-top-color: var(--primary); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 1.5rem;"></div>
-                <p style="font-weight: 500; color: var(--text-muted);">Fetching your masterpieces...</p>
+        <div id="cv-list" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 2.5rem;">
+            <!-- Loading -->
+            <div style="grid-column: 1/-1; text-align: center; padding: 5rem;">
+                <div class="spinner" style="width: 40px; height: 40px; border: 4px solid var(--border); border-top-color: var(--p-500); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 1.5rem;"></div>
+                <p style="color: var(--text-muted); font-weight: 500;">Accessing your secure vault...</p>
             </div>
         </div>
     </main>
@@ -55,64 +57,62 @@
 
                 if (cvs.length === 0) {
                     container.innerHTML = `
-                        <div style="grid-column: 1/-1; text-align: center; padding: 6rem; background: var(--bg-card); border-radius: var(--radius-lg); border: 2px dashed var(--border);">
-                            <div style="width: 80px; height: 80px; background: var(--bg-app); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 2rem;">
-                                <i data-lucide="sparkles" style="width: 40px; height: 40px; color: var(--primary);"></i>
+                        <div style="grid-column: 1/-1; text-align: center; padding: 6rem; background: var(--bg-card); border-radius: var(--radius-lg); border: 1px solid var(--border); box-shadow: var(--shadow-premium);">
+                            <div style="width: 100px; height: 100px; background: var(--slate-100); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 2rem; color: var(--p-500);">
+                                <i data-lucide="file-plus" style="width: 48px; height: 48px;"></i>
                             </div>
-                            <h2 style="margin-bottom: 1rem;">No resumes yet</h2>
-                            <p style="color: var(--text-muted); margin-bottom: 2.5rem; max-width: 400px; margin-left: auto; margin-right: auto;">
-                                Launch your career with a stunning resume. Our AI-optimized templates are ready for you.
+                            <h2 style="margin-bottom: 1rem;">The stage is empty</h2>
+                            <p style="color: var(--text-muted); margin-bottom: 3rem; max-width: 400px; margin-left: auto; margin-right: auto;">
+                                Start your journey by creating your first professional resume. It only takes a few minutes to look like a pro.
                             </p>
-                            <a href="editor.html" class="btn btn-primary btn-lg" style="padding: 1rem 2.5rem; font-size: 1.1rem;">
-                                Create Your First Resume
-                            </a>
+                            <a href="editor.html" class="btn btn-primary" style="padding: 1rem 3rem; font-size: 1.1rem;">Get Started</a>
                         </div>
                     `;
                     lucide.createIcons();
                     return;
                 }
 
-                cvs.forEach((cv, index) => {
+                cvs.forEach((cv, i) => {
                     const card = document.createElement('div');
                     card.className = 'cv-card';
-                    card.style.animation = `slideIn 0.5s ease-out ${index * 0.1}s forwards`;
+                    card.style.animation = `fadeInUp 0.6s ease-out ${i * 0.1}s forwards`;
                     card.style.opacity = '0';
                     card.innerHTML = `
-                        <div class="flex-between">
-                            <div style="width: 48px; height: 48px; background: var(--bg-app); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--primary);">
-                                <i data-lucide="file-text"></i>
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                            <div class="cv-card-icon">
+                                <i data-lucide="file-text" style="width: 28px; height: 28px;"></i>
                             </div>
-                            <div style="font-size: 0.8rem; font-weight: 700; color: var(--success); background: #ecfdf5; padding: 0.25rem 0.75rem; border-radius: 20px;">
-                                ACTIVE
+                            <div style="display: flex; align-items: center; gap: 0.5rem; background: #ecfdf5; color: #059669; padding: 0.4rem 0.8rem; border-radius: 20px; font-size: 0.75rem; font-weight: 700;">
+                                <div class="active-pulse"></div>
+                                SYNCED
                             </div>
                         </div>
                         <div>
-                            <h3 style="margin-bottom: 0.5rem; font-size: 1.25rem;">${cv.title || 'Untitled Resume'}</h3>
-                            <div style="display: flex; align-items: center; gap: 0.5rem; color: var(--text-muted); font-size: 0.9rem;">
-                                <i data-lucide="user" style="width: 14px; height: 14px;"></i>
-                                <span>${cv.full_name || 'Anonymous User'}</span>
+                            <h3 style="font-size: 1.5rem; margin-bottom: 0.5rem;">${cv.title || 'Untitled Project'}</h3>
+                            <div style="display: flex; align-items: center; gap: 0.5rem; color: var(--text-muted); font-size: 0.95rem;">
+                                <i data-lucide="user" style="width: 16px;"></i>
+                                <span>${cv.full_name || 'Anonymous Creator'}</span>
                             </div>
                         </div>
-                        <div class="cv-actions" style="display: flex; gap: 1rem; margin-top: 1rem;">
-                            <a href="editor.html?id=${cv.id}" class="btn btn-secondary" style="flex: 1; justify-content: center;">
-                                <i data-lucide="edit-3" style="width: 18px; height: 18px;"></i>
-                                Edit
+                        <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+                            <a href="editor.html?id=${cv.id}" class="btn btn-ghost" style="flex: 1; justify-content: center;">
+                                <i data-lucide="edit-3" style="width: 18px;"></i>
+                                <span>Refine</span>
                             </a>
-                            <button onclick="deleteCV(${cv.id})" class="btn btn-secondary" style="color: var(--danger); border-color: transparent; background: #fff1f2;">
-                                <i data-lucide="trash-2" style="width: 18px; height: 18px;"></i>
+                            <button onclick="deleteCV(${cv.id})" class="btn btn-ghost" style="color: var(--slate-400); border-color: transparent;">
+                                <i data-lucide="trash-2" style="width: 20px;"></i>
                             </button>
                         </div>
                     `;
                     container.appendChild(card);
                 });
                 lucide.createIcons();
-            } catch (error) {
-                console.error('Error fetching CVs:', error);
+            } catch (err) {
                 document.getElementById('cv-list').innerHTML = `
-                    <div style="grid-column: 1/-1; text-align: center; padding: 4rem; color: var(--danger);">
-                        <i data-lucide="alert-triangle" style="width: 48px; height: 48px; margin-bottom: 1rem;"></i>
-                        <h3>Connection Error</h3>
-                        <p>Could not reach the high-speed backend. Is the Python server running?</p>
+                    <div style="grid-column: 1/-1; text-align: center; color: var(--p-500);">
+                        <i data-lucide="alert-circle" style="width: 48px; height: 48px; margin-bottom: 1rem;"></i>
+                        <h3>System Connection Interrupted</h3>
+                        <p>We couldn't connect to the backend. Please check your Python terminal.</p>
                     </div>
                 `;
                 lucide.createIcons();
@@ -120,19 +120,15 @@
         }
 
         async function deleteCV(id) {
-            if (!confirm('Are you sure you want to delete this resume?')) return;
-            try {
-                const response = await fetch(`/api/cvs/${id}`, { method: 'DELETE' });
-                if (response.ok) fetchCVs();
-            } catch (error) {
-                alert('Failed to delete resume.');
-            }
+            if (!confirm('Are you sure you want to retire this resume?')) return;
+            await fetch(`/api/cvs/${id}`, { method: 'DELETE' });
+            fetchCVs();
         }
 
-        window.onload = () => {
-            fetchCVs();
-            lucide.createIcons();
-        };
+        window.onload = () => { fetchCVs(); lucide.createIcons(); };
     </script>
+    <style>
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
 </body>
 </html>
