@@ -48,6 +48,7 @@ def save_cv(cv_data):
             supabase.table("experience").delete().eq("cv_id", cv_id).execute()
             supabase.table("education").delete().eq("cv_id", cv_id).execute()
             supabase.table("skills").delete().eq("cv_id", cv_id).execute()
+            supabase.table("projects").delete().eq("cv_id", cv_id).execute()
         else:
             # Insert new
             response = supabase.table("cvs").insert(cv_payload).execute()
@@ -88,6 +89,18 @@ def save_cv(cv_data):
         if skill_data:
             supabase.table("skills").insert(skill_data).execute()
 
+        # Insert Projects
+        proj_data = []
+        for proj in cv_data.get('projects', []):
+            proj_data.append({
+                "cv_id": cv_id,
+                "name": proj.get('name'),
+                "link": proj.get('link'),
+                "description": proj.get('description')
+            })
+        if proj_data:
+            supabase.table("projects").insert(proj_data).execute()
+
         return cv_id
     except Exception as e:
         print(f"Supabase Error: {e}")
@@ -119,6 +132,9 @@ def get_cv(cv_id):
 
         skills_response = supabase.table("skills").select("skill_name").eq("cv_id", cv_id).execute()
         cv['skills'] = [s['skill_name'] for s in skills_response.data]
+
+        proj_response = supabase.table("projects").select("*").eq("cv_id", cv_id).execute()
+        cv['projects'] = proj_response.data
 
         return cv
     except Exception as e:

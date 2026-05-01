@@ -96,6 +96,50 @@ def get_web_html(cv_data):
     if cv_data.get("linkedin"):
         meta_html += f'<div class="meta-item"><i data-lucide="linkedin"></i> {cv_data.get("linkedin")}</div>'
 
+    theme_css = ""
+    if theme == "Classic":
+        theme_css = """
+        body { font-family: 'Georgia', serif; }
+        .section { border-radius: 0; background: none; border: none; padding: 0; border-top: 2px solid var(--primary); padding-top: 20px; }
+        .side-section { border-radius: 0; background: none; border: none; box-shadow: none; padding: 0; border-top: 2px solid var(--primary); padding-top: 20px; }
+        .section-title::after { display: none; }
+        header { border-bottom: 4px solid var(--primary); text-align: center; justify-content: center; flex-direction: column; }
+        .header-meta { grid-template-columns: repeat(4, auto); justify-content: center; }
+        .skill-cloud span { border-radius: 0; border: 1px solid var(--primary); background: transparent; }
+        """
+    elif theme == "Formal":
+        theme_css = """
+        .page { font-family: 'Helvetica', sans-serif; }
+        .section { border-radius: 0; border: 1px solid var(--border-light); background: #fafafa; }
+        .side-section { border-radius: 0; box-shadow: none; border: 1px solid var(--border-light); }
+        .section-title { color: var(--primary); letter-spacing: 3px; border-bottom: 1px solid var(--primary); padding-bottom: 8px; }
+        .section-title::after { display: none; }
+        .skill-cloud span { border-radius: 0; background: #fff; border: 1px solid var(--secondary); color: var(--text-dark); }
+        .exp-item { border-left: 2px solid var(--primary); padding-left: 15px; border-bottom: none; }
+        """
+    elif theme == "Modern":
+        theme_css = """
+        .page { box-shadow: 0 40px 100px rgba(0,0,0,0.1); border-radius: 12px; margin-top: 20px; overflow: hidden; }
+        .section { box-shadow: 0 4px 12px rgba(0,0,0,0.02); background: rgba(255,255,255,0.8); backdrop-filter: blur(10px); }
+        .skill-cloud span { border-radius: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        header { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; }
+        .header-content h1 { color: white; }
+        .meta-item { color: rgba(255,255,255,0.9); }
+        .meta-item i { color: white; }
+        """
+    elif theme == "Colorful":
+        theme_css = """
+        .section-title::after { background: linear-gradient(to right, var(--primary), var(--secondary), transparent); height: 3px; }
+        .exp-date { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; border: none; box-shadow: 0 4px 10px rgba(79, 70, 229, 0.3); }
+        .company-name { background: var(--accent); color: var(--primary); border-radius: 20px; padding: 4px 12px; }
+        .skill-cloud span { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; border-radius: 8px; border: none; box-shadow: 0 4px 10px rgba(79, 70, 229, 0.2); }
+        header { background: var(--primary); color: white; }
+        .header-content h1 { color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.2); }
+        .meta-item { color: rgba(255,255,255,0.9); }
+        .meta-item i { color: #facc15; }
+        .side-col { background: var(--accent); }
+        """
+
     html = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -138,9 +182,12 @@ def get_web_html(cv_data):
 
         @media print {{
             body {{ background: white; padding: 0; }}
-            .page {{ box-shadow: none; margin: 0; width: 100%; }}
+            .page {{ box-shadow: none; margin: 0; width: 100%; border-radius: 0; }}
             .no-print {{ display: none !important; }}
         }}
+
+        {theme_css}
+
 
         header {{
             padding: 40px 60px;
