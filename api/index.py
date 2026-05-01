@@ -1,4 +1,7 @@
 import os
+import sys
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+
 from flask import Flask, request, jsonify, Response, send_from_directory
 import database
 import pdf_generator
