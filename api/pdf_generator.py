@@ -242,7 +242,25 @@ def get_web_html(cv_data):
 <body>
     <div class="toolbar no-print">
         <button class="tool-btn" onclick="window.print()">📥 SAVE AS PDF</button>
+        <button class="tool-btn" style="background: #10b981;" onclick="downloadHTML()">💾 DOWNLOAD HTML</button>
     </div>
+    <script>
+        function downloadHTML() {{
+            const clone = document.documentElement.cloneNode(true);
+            const toolbar = clone.querySelector('.toolbar');
+            if (toolbar) toolbar.remove();
+            const html = '<!DOCTYPE html>\\n' + clone.outerHTML;
+            const blob = new Blob([html], {{ type: 'text/html' }});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'resume.html';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }}
+    </script>
     <div class="page">
         <header>
             <h1>{cv_data.get('full_name', 'Your Name')}</h1>
