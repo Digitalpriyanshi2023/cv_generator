@@ -85,6 +85,17 @@
                     </div>
                 </div>
 
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 2rem;">
+                    <div class="field-group" style="margin-bottom: 0;">
+                        <label>Location</label>
+                        <input type="text" id="address" placeholder="New York, NY" oninput="debouncedPreview()">
+                    </div>
+                    <div class="field-group" style="margin-bottom: 0;">
+                        <label>LinkedIn / Portfolio</label>
+                        <input type="text" id="linkedin" placeholder="linkedin.com/in/alex" oninput="debouncedPreview()">
+                    </div>
+                </div>
+
                 <div class="field-group">
                     <label>Professional Bio</label>
                     <textarea id="summary" rows="5" placeholder="Highlight your biggest wins..." oninput="debouncedPreview()"></textarea>
@@ -173,6 +184,8 @@
             document.getElementById('full_name').value = data.full_name || '';
             document.getElementById('email').value = data.email || '';
             document.getElementById('phone').value = data.phone || '';
+            document.getElementById('address').value = data.address || '';
+            document.getElementById('linkedin').value = data.linkedin || '';
             document.getElementById('summary').value = data.summary || '';
             document.getElementById('skills').value = (data.skills || []).join(', ');
 
@@ -258,6 +271,8 @@
                 full_name: document.getElementById('full_name').value,
                 email: document.getElementById('email').value,
                 phone: document.getElementById('phone').value,
+                address: document.getElementById('address').value,
+                linkedin: document.getElementById('linkedin').value,
                 summary: document.getElementById('summary').value,
                 skills: document.getElementById('skills').value.split(',').map(s => s.trim()).filter(s => s),
                 experience,
