@@ -182,59 +182,120 @@ def get_web_html(cv_data):
             border-left: 1px solid var(--border-light);
         }}
 
-        .section {{ margin-bottom: 35px; }}
+        .section {{ 
+            margin-bottom: 35px; 
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 12px;
+            border: 1px solid var(--border-light);
+            transition: 0.3s;
+        }}
         .section-title {{
             font-size: 13px;
-            font-weight: 800;
+            font-weight: 900;
             color: var(--primary);
             text-transform: uppercase;
-            letter-spacing: 1.5px;
-            margin-bottom: 20px;
+            letter-spacing: 2px;
+            margin-bottom: 25px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 15px;
         }}
         .section-title::after {{
             content: '';
             flex: 1;
-            height: 1px;
-            background: var(--accent);
+            height: 2px;
+            background: linear-gradient(to right, var(--accent), transparent);
         }}
 
-        .summary-text {{ font-size: 13.5px; color: var(--text-dark); line-height: 1.6; text-align: justify; }}
+        .summary-text {{ 
+            font-size: 13.5px; 
+            color: var(--text-dark); 
+            line-height: 1.7; 
+            text-align: justify; 
+            padding-left: 10px;
+            border-left: 3px solid var(--accent);
+        }}
         
-        .exp-item {{ margin-bottom: 25px; }}
-        .exp-header {{ display: flex; justify-content: space-between; align-items: flex-start; }}
-        .job-title {{ font-size: 16px; font-weight: 700; color: var(--text-dark); }}
-        .company-name {{ font-size: 14px; font-weight: 600; color: var(--primary); margin-top: 2px; }}
-        .exp-date {{ font-size: 11px; font-weight: 700; color: var(--text-light); text-transform: uppercase; margin-top: 4px; }}
-        .exp-desc {{ font-size: 13px; color: var(--text-light); line-height: 1.5; margin-top: 10px; }}
+        .exp-item {{ 
+            margin-bottom: 30px; 
+            position: relative;
+            padding-bottom: 20px;
+            border-bottom: 1px dashed var(--border-light);
+        }}
+        .exp-item:last-child {{ border-bottom: none; padding-bottom: 0; }}
 
-        .side-section {{ margin-bottom: 30px; }}
+        .exp-header {{ display: flex; justify-content: space-between; align-items: flex-start; }}
+        .job-title {{ font-size: 17px; font-weight: 800; color: var(--text-dark); letter-spacing: -0.5px; }}
+        .company-name {{ 
+            font-size: 14px; 
+            font-weight: 700; 
+            color: var(--primary); 
+            margin-top: 4px;
+            display: inline-block;
+            padding: 2px 8px;
+            background: var(--accent);
+            border-radius: 4px;
+        }}
+        .exp-date {{ 
+            font-size: 11px; 
+            font-weight: 800; 
+            color: var(--text-light); 
+            text-transform: uppercase; 
+            background: #f8fafc;
+            padding: 4px 10px;
+            border-radius: 20px;
+            border: 1px solid var(--border-light);
+        }}
+        .exp-desc {{ font-size: 13px; color: var(--text-light); line-height: 1.6; margin-top: 12px; }}
+
+        .side-section {{ 
+            margin-bottom: 35px; 
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            border: 1px solid rgba(0,0,0,0.03);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+        }}
         .side-title {{
             font-size: 12px;
-            font-weight: 800;
+            font-weight: 900;
             color: var(--primary);
             text-transform: uppercase;
-            letter-spacing: 1.2px;
-            margin-bottom: 15px;
-            padding-bottom: 5px;
+            letter-spacing: 1.5px;
+            margin-bottom: 20px;
+            padding-bottom: 8px;
             border-bottom: 2px solid var(--accent);
+            display: flex;
+            justify-content: space-between;
         }}
-        .side-item {{ margin-bottom: 15px; }}
-        .side-item-title {{ font-size: 13px; font-weight: 700; color: var(--text-dark); }}
-        .side-item-sub {{ font-size: 12px; color: var(--text-light); margin-top: 2px; }}
-        .side-item-meta {{ font-size: 11px; color: var(--text-light); font-weight: 600; margin-top: 4px; }}
+        .side-item {{ margin-bottom: 20px; }}
+        .side-item:last-child {{ margin-bottom: 0; }}
+        .side-item-title {{ font-size: 13.5px; font-weight: 700; color: var(--text-dark); }}
+        .side-item-sub {{ font-size: 12.5px; color: var(--text-light); margin-top: 4px; font-weight: 500; }}
+        .side-item-meta {{ 
+            font-size: 11px; 
+            color: var(--primary); 
+            font-weight: 800; 
+            margin-top: 6px; 
+            display: inline-block;
+            opacity: 0.8;
+        }}
 
-        .skill-cloud {{ display: flex; flex-wrap: wrap; gap: 6px; }}
+        .skill-cloud {{ display: flex; flex-wrap: wrap; gap: 8px; }}
         .skill-cloud span {{
-            background: white;
+            background: var(--accent);
             color: var(--primary);
-            padding: 4px 10px;
-            border-radius: 4px;
+            padding: 6px 14px;
+            border-radius: 8px;
             font-size: 11px;
-            font-weight: 700;
-            border: 1px solid var(--border-light);
+            font-weight: 800;
+            border: 1px solid transparent;
+            transition: 0.2s;
+        }}
+        .skill-cloud span:hover {{
+            background: var(--primary);
+            color: white;
         }}
 
         .toolbar {{
@@ -269,10 +330,18 @@ def get_web_html(cv_data):
 </head>
 <body>
     <div class="toolbar no-print">
-        <button class="tool-btn" onclick="window.print()"><i data-lucide="printer"></i> PDF</button>
+        <button class="tool-btn" style="background: #6366f1;" onclick="triggerSave()"><i data-lucide="save"></i> SAVE</button>
+        <button class="tool-btn" style="background: #4b5563;" onclick="window.print()"><i data-lucide="printer"></i> PDF</button>
         <button class="tool-btn" style="background: #10b981;" onclick="downloadHTML()"><i data-lucide="download"></i> HTML</button>
     </div>
     <script>
+        function triggerSave() {{
+            if (window.parent && typeof window.parent.saveCV === 'function') {{
+                window.parent.saveCV();
+            }} else {{
+                alert("Save action is only available within the Resume Editor.");
+            }}
+        }}
         function downloadHTML() {{
             const clone = document.documentElement.cloneNode(true);
             const toolbar = clone.querySelector('.toolbar');

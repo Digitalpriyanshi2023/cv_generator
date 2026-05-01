@@ -94,12 +94,15 @@
                                 <span>${cv.full_name || 'Anonymous Creator'}</span>
                             </div>
                         </div>
-                        <div style="display: flex; gap: 1rem; margin-top: 1rem;">
-                            <a href="editor.html?id=${cv.id}" class="btn btn-ghost" style="flex: 1; justify-content: center;">
+                        <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+                            <a href="editor.html?id=${cv.id}" class="btn btn-primary" style="flex: 1; justify-content: center;">
                                 <i data-lucide="edit-3" style="width: 18px;"></i>
                                 <span>Refine</span>
                             </a>
-                            <button onclick="deleteCV(${cv.id})" class="btn btn-ghost" style="color: var(--slate-400); border-color: transparent;">
+                            <a href="/api/cvs/${cv.id}/preview" target="_blank" class="btn btn-ghost" title="Preview CV" style="width: 44px; padding: 0; justify-content: center;">
+                                <i data-lucide="eye" style="width: 20px;"></i>
+                            </a>
+                            <button onclick="deleteCV(${cv.id})" class="btn btn-ghost" title="Delete CV" style="width: 44px; padding: 0; justify-content: center; color: var(--slate-400); border-color: transparent;">
                                 <i data-lucide="trash-2" style="width: 20px;"></i>
                             </button>
                         </div>
