@@ -98,21 +98,21 @@ def get_web_html(cv_data):
             --secondary: {t['secondary']};
             --accent: {t['accent']};
             --header-text: {header_text_color};
-            --text-dark: #0f172a;
+            --text-dark: #1e293b;
             --text-light: #64748b;
-            --border-light: #e2e8f0;
+            --border-light: #f1f5f9;
         }}
         * {{ box-sizing: border-box; -webkit-print-color-adjust: exact; }}
         
         @page {{ size: A4; margin: 0; }}
 
         body {{
-            background: #cbd5e1;
+            background: #f1f5f9;
             font-family: 'Inter', sans-serif;
             color: var(--text-dark);
             margin: 0;
-            padding: 40px 0;
-            line-height: 1.6;
+            padding: 20px 0;
+            line-height: 1.5;
         }}
 
         .page {{
@@ -120,10 +120,9 @@ def get_web_html(cv_data):
             min-height: 297mm;
             margin: 0 auto;
             background: white;
-            box-shadow: 0 40px 100px rgba(0,0,0,0.1);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.05);
             display: flex;
             flex-direction: column;
-            overflow: hidden;
         }}
 
         @media print {{
@@ -133,64 +132,67 @@ def get_web_html(cv_data):
         }}
 
         header {{
-            padding: 60px 80px;
+            padding: 40px 60px;
             background: {t['header_bg']};
-            border-bottom: 6px solid var(--primary);
-            color: var(--header-text);
+            border-bottom: 1px solid var(--border-light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }}
-        header h1 {{
+        .header-content h1 {{
             margin: 0;
             font-family: 'Outfit', sans-serif;
-            font-size: 52px;
+            font-size: 36px;
             font-weight: 800;
             line-height: 1;
-            letter-spacing: -2px;
+            letter-spacing: -1.5px;
+            color: var(--primary);
             text-transform: uppercase;
         }}
         .header-meta {{
-            margin-top: 25px;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 24px;
-            font-size: 13px;
+            margin-top: 15px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px 20px;
+            font-size: 12px;
             font-weight: 600;
         }}
         .meta-item {{
             display: flex;
             align-items: center;
-            gap: 8px;
-            opacity: 0.9;
+            gap: 6px;
+            color: var(--text-light);
         }}
         .meta-item i {{
-            width: 16px;
-            height: 16px;
+            width: 14px;
+            height: 14px;
             color: var(--primary);
         }}
 
         .grid {{
             display: grid;
             grid-template-columns: 1.8fr 1fr;
-            flex-grow: 1;
+            flex: 1;
         }}
 
-        .main-col {{ padding: 50px 40px 50px 80px; }}
+        .main-col {{ padding: 40px 40px 40px 60px; }}
         .side-col {{
             background: {t['sidebar_bg']};
-            padding: 50px 60px 50px 40px;
+            padding: 40px 60px 40px 40px;
             border-left: 1px solid var(--border-light);
         }}
 
-        .section {{ margin-bottom: 45px; position: relative; }}
+        .section {{ margin-bottom: 35px; }}
         .section-title {{
-            font-size: 15px;
+            font-size: 13px;
             font-weight: 800;
             color: var(--primary);
             text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 25px;
+            letter-spacing: 1.5px;
+            margin-bottom: 20px;
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
         }}
         .section-title::after {{
             content: '';
@@ -199,87 +201,76 @@ def get_web_html(cv_data):
             background: var(--accent);
         }}
 
-        .summary-text {{ font-size: 14.5px; color: var(--text-light); text-align: justify; line-height: 1.7; }}
+        .summary-text {{ font-size: 13.5px; color: var(--text-dark); line-height: 1.6; text-align: justify; }}
         
-        .exp-item {{ margin-bottom: 30px; position: relative; padding-left: 20px; border-left: 2px solid var(--accent); }}
-        .exp-item::before {{
-            content: '';
-            position: absolute;
-            left: -6px;
-            top: 6px;
-            width: 10px;
-            height: 10px;
-            background: var(--primary);
-            border-radius: 50%;
-        }}
-        .exp-header {{ margin-bottom: 10px; }}
-        .job-title {{ font-size: 19px; font-weight: 700; color: var(--text-dark); display: block; }}
-        .company-name {{ font-size: 15px; font-weight: 600; color: var(--primary); margin-top: 2px; display: block; }}
-        .exp-date {{ font-size: 12px; font-weight: 700; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px; display: block; }}
-        .exp-desc {{ font-size: 13.5px; color: var(--text-light); line-height: 1.6; margin-top: 10px; }}
+        .exp-item {{ margin-bottom: 25px; }}
+        .exp-header {{ display: flex; justify-content: space-between; align-items: flex-start; }}
+        .job-title {{ font-size: 16px; font-weight: 700; color: var(--text-dark); }}
+        .company-name {{ font-size: 14px; font-weight: 600; color: var(--primary); margin-top: 2px; }}
+        .exp-date {{ font-size: 11px; font-weight: 700; color: var(--text-light); text-transform: uppercase; margin-top: 4px; }}
+        .exp-desc {{ font-size: 13px; color: var(--text-light); line-height: 1.5; margin-top: 10px; }}
 
-        .side-section {{ margin-bottom: 40px; }}
+        .side-section {{ margin-bottom: 30px; }}
         .side-title {{
-            font-size: 14px;
+            font-size: 12px;
             font-weight: 800;
             color: var(--primary);
             text-transform: uppercase;
-            letter-spacing: 1.5px;
-            margin-bottom: 20px;
-            padding-bottom: 8px;
+            letter-spacing: 1.2px;
+            margin-bottom: 15px;
+            padding-bottom: 5px;
             border-bottom: 2px solid var(--accent);
         }}
-        .side-item {{ margin-bottom: 25px; }}
-        .side-item-title {{ font-size: 14.5px; font-weight: 700; color: var(--text-dark); }}
-        .side-item-sub {{ font-size: 13px; color: var(--text-light); font-weight: 500; margin-top: 4px; }}
-        .side-item-meta {{ font-size: 12px; color: var(--text-light); font-weight: 600; margin-top: 6px; opacity: 0.8; }}
+        .side-item {{ margin-bottom: 15px; }}
+        .side-item-title {{ font-size: 13px; font-weight: 700; color: var(--text-dark); }}
+        .side-item-sub {{ font-size: 12px; color: var(--text-light); margin-top: 2px; }}
+        .side-item-meta {{ font-size: 11px; color: var(--text-light); font-weight: 600; margin-top: 4px; }}
 
-        .skill-cloud {{ display: flex; flex-wrap: wrap; gap: 8px; }}
+        .skill-cloud {{ display: flex; flex-wrap: wrap; gap: 6px; }}
         .skill-cloud span {{
             background: white;
             color: var(--primary);
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-size: 12px;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 11px;
             font-weight: 700;
             border: 1px solid var(--border-light);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
         }}
 
         .toolbar {{
             position: fixed;
-            bottom: 30px;
+            bottom: 20px;
             left: 50%;
             transform: translateX(-50%);
             background: #0f172a;
-            padding: 12px 24px;
+            padding: 10px 20px;
             border-radius: 50px;
             display: flex;
-            gap: 15px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+            gap: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
             z-index: 1000;
         }}
         .tool-btn {{
             background: #6366f1;
             color: white;
             border: none;
-            padding: 12px 24px;
+            padding: 10px 20px;
             border-radius: 50px;
             font-weight: 700;
-            font-size: 13px;
+            font-size: 12px;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: 0.2s;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
         }}
-        .tool-btn:hover {{ transform: translateY(-3px) scale(1.05); box-shadow: 0 10px 20px rgba(99, 102, 241, 0.4); }}
+        .tool-btn:hover {{ transform: translateY(-2px); }}
     </style>
 </head>
 <body>
     <div class="toolbar no-print">
-        <button class="tool-btn" onclick="window.print()"><i data-lucide="file-down"></i> SAVE AS PDF</button>
-        <button class="tool-btn" style="background: #10b981;" onclick="downloadHTML()"><i data-lucide="code"></i> DOWNLOAD HTML</button>
+        <button class="tool-btn" onclick="window.print()"><i data-lucide="printer"></i> PDF</button>
+        <button class="tool-btn" style="background: #10b981;" onclick="downloadHTML()"><i data-lucide="download"></i> HTML</button>
     </div>
     <script>
         function downloadHTML() {{
@@ -301,12 +292,14 @@ def get_web_html(cv_data):
     </script>
     <div class="page">
         <header>
-            <h1>{cv_data.get('full_name', 'Your Name')}</h1>
-            <div class="header-meta">
-                {f'<div class="meta-item"><i data-lucide="mail"></i> <span>{cv_data.get("email")}</span></div>' if cv_data.get("email") else ""}
-                {f'<div class="meta-item"><i data-lucide="phone"></i> <span>{cv_data.get("phone")}</span></div>' if cv_data.get("phone") else ""}
-                {f'<div class="meta-item"><i data-lucide="map-pin"></i> <span>{cv_data.get("address")}</span></div>' if cv_data.get("address") else ""}
-                {f'<div class="meta-item"><i data-lucide="linkedin"></i> <span>{cv_data.get("linkedin")}</span></div>' if cv_data.get("linkedin") else ""}
+            <div class="header-content">
+                <h1>{cv_data.get('full_name', 'Your Name')}</h1>
+                <div class="header-meta">
+                    {f'<div class="meta-item"><i data-lucide="mail"></i> {cv_data.get("email")}</div>' if cv_data.get("email") else ""}
+                    {f'<div class="meta-item"><i data-lucide="phone"></i> {cv_data.get("phone")}</div>' if cv_data.get("phone") else ""}
+                    {f'<div class="meta-item"><i data-lucide="map-pin"></i> {cv_data.get("address")}</div>' if cv_data.get("address") else ""}
+                    {f'<div class="meta-item"><i data-lucide="linkedin"></i> {cv_data.get("linkedin")}</div>' if cv_data.get("linkedin") else ""}
+                </div>
             </div>
         </header>
 
